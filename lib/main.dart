@@ -14,7 +14,7 @@ class MainApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainScreen(title: 'Main Screen'),
+      home: MainScreen(title: 'PROJECTS'),
     );
   }
 }

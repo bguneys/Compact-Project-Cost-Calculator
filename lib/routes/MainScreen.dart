@@ -1,8 +1,9 @@
 import 'package:bgsapp02082020/data/Project.dart';
-import 'package:bgsapp02082020/data/ProjectDatabase.dart';
 import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/MainScreenViewModel.dart';
 import 'package:flutter/material.dart';
+
+import 'SettingsScreen.dart';
 
 class MainScreen extends StatefulWidget {
   MainScreen({Key key, this.title}) : super(key: key);
@@ -22,7 +23,9 @@ class _MainScreenState extends State<MainScreen> {
   // create ViewModel for database operations
   final mainScreenViewModel = MainScreenViewModel(projectRepository);
 
-  // Custom method for FAB click
+  /**
+   * Custom method for FAB Click
+   */
   void _addProject() async {
 
     // create dummy project
@@ -42,11 +45,41 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  /**
+   * Custom method for handling clicks on AppBar OverFlow menu
+   */
+  void _handleClick(String value) {
+    switch (value) {
+      case 'Settings':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SettingsScreen()),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         title: Text(widget.title),
+        centerTitle: true,
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: _handleClick,
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) {
+              return {'Settings'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
 
       body: Center(
@@ -68,4 +101,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+
+
+
 }
