@@ -1,4 +1,6 @@
 import 'package:bgsapp02082020/data/Project.dart';
+import 'package:bgsapp02082020/data/ProjectDatabase.dart';
+import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/MainScreenViewModel.dart';
 import 'package:flutter/material.dart';
 
@@ -14,11 +16,14 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   String _projectTitle = "None";
 
-  void _addProject() async {
+  // create ProjectDatabase through creating ProjectRepository instance
+  static final projectRepository = ProjectRepository.getInstance();
 
-    // create ViewModel for database operations
-    var mainScreenViewModel = MainScreenViewModel();
-    mainScreenViewModel.createDatabase();
+  // create ViewModel for database operations
+  final mainScreenViewModel = MainScreenViewModel(projectRepository);
+
+  // Custom method for FAB click
+  void _addProject() async {
 
     // create dummy project
     var sampleProject = Project(
