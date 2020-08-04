@@ -1,3 +1,4 @@
+import 'package:bgsapp02082020/data/Constants.dart';
 import 'package:bgsapp02082020/data/Project.dart';
 import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/MainScreenViewModel.dart';
@@ -15,7 +16,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String _projectTitle = "None";
+
+  List<Project> projectList = new List();
 
   // create ProjectDatabase through creating ProjectRepository instance
   static final projectRepository = ProjectRepository.getInstance();
@@ -23,26 +25,69 @@ class _MainScreenState extends State<MainScreen> {
   // create ViewModel for database operations
   final mainScreenViewModel = MainScreenViewModel(projectRepository);
 
+  @override
+  void initState() {
+    super.initState();
+
+    populateProjectList();  //Custom method for populating projectList variable from database.
+  }
+
+  /**
+   * Custom method for populating projectList variable from database.
+   */
+  void populateProjectList() {
+    mainScreenViewModel.getProjects().then((value) {
+      setState(() {
+        value.forEach((element) {
+          projectList.add(Project(
+              id: element.id,
+              title: element.title,
+              durationInDay: element.durationInDay,
+              cost: element.cost,
+              hourlyCost: element.hourlyCost));
+        });
+      });
+
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
   /**
    * Custom method for FAB Click
    */
   void _addProject() async {
 
+    // Boolean to check if a Project with same name exists in database
+    bool isProjectNameSame = false;
+
     // create dummy project
     var sampleProject = Project(
-        id: 0,
-        title: "Test Project",
+        title: "Delay 300",
         durationInDay: 35,
         cost: 10.0,
         hourlyCost: 2.0);
 
-    // insert a project into the database.
-    await mainScreenViewModel.insertProject(sampleProject);
-
-    // call to re-build widgets with a Text widget showing sample project title
-    setState(() {
-      _projectTitle = sampleProject.title;
+    // if a Project with same name exists in database then give a warning message
+    // await keyword is used here to make flow to wait for this block execution
+    await projectList.forEach((element) {
+      if (sampleProject.title == element.title) {
+        print("Project with same title can't be added.");
+        isProjectNameSame = true;
+      }
     });
+
+    // if there is no Project wth same name then add Project to the Database and update UI
+    if (!isProjectNameSame) {
+      // insert a project into the database.
+      await mainScreenViewModel.insertProject(sampleProject);
+
+      setState(() {
+        // We update UI by adding the Project to the list inside setState() method.
+        // We use "0" here for id because id is autoincremented by database
+        projectList.add(sampleProject);
+      });
+    }
   }
 
   /**
@@ -82,14 +127,41 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
 
-      body: Center(
+      body: Container(
+
+        //ListView to show project list
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(
-              '$_projectTitle',
-              style: Theme.of(context).textTheme.headline4,
+            Expanded(
+              child: ListView.builder(itemBuilder: (context, index) {
+                if (index == projectList.length) {
+                  return null;
+                }
+                return ListTile(
+                  title: Text(projectList[index].title),
+                  leading: Text(projectList[index].id.toString()),
+                );
+              }),
             ),
+
+            //Buttom bar view
+            Container(
+                height: 100.0,
+                width: double.infinity,
+                color: Colors.amberAccent,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                          child: Text("Cuphead")),
+                      Expanded(
+                          child: Text("Mugman")),
+                    ],
+                  ),
+                ),
+            )
           ],
         ),
       ),

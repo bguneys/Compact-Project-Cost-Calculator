@@ -25,7 +25,7 @@ class ProjectDatabase {
         // When the database is created first time, create a table to store data.
         onCreate: (db, version) {
           return db.execute(
-            "CREATE TABLE ${Constants.databaseTable} (${Constants.columnId} INTEGER PRIMARY KEY, ${Constants.columnTitle} TEXT, ${Constants.columnDurationInDay} INTEGER, ${Constants.columnCost} REAL, ${Constants.columnHourly} REAL)",
+            "CREATE TABLE ${Constants.databaseTable} (${Constants.columnId} INTEGER PRIMARY KEY AUTOINCREMENT, ${Constants.columnTitle} TEXT, ${Constants.columnDurationInDay} INTEGER, ${Constants.columnCost} REAL, ${Constants.columnHourly} REAL)",
           );
         },
         version: Constants.databaseVersion,
@@ -73,6 +73,7 @@ class ProjectDatabase {
       where: "id = ?",
       whereArgs: [project.id],
     );
+
   }
 
   /// Custom method for deleting a Project from Database table
@@ -84,5 +85,6 @@ class ProjectDatabase {
       where: "id = ?",
       whereArgs: [project.id],
     );
+
   }
 }
