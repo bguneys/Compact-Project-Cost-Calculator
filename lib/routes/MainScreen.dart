@@ -17,6 +17,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
+  // global key to be used for reaching Scaffold widget to show Snackbar
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  //Project list variable to store Projects from database and show them oin ListView
   List<Project> projectList = new List();
 
   // create ProjectDatabase through creating ProjectRepository instance
@@ -24,6 +28,9 @@ class _MainScreenState extends State<MainScreen> {
 
   // create ViewModel for database operations
   final mainScreenViewModel = MainScreenViewModel(projectRepository);
+
+  //TextController for controlling text entered in TextFormField for project title
+  TextEditingController textController = new TextEditingController();
 
   @override
   void initState() {
@@ -61,33 +68,41 @@ class _MainScreenState extends State<MainScreen> {
     // Boolean to check if a Project with same name exists in database
     bool isProjectNameSame = false;
 
-    // create dummy project
-    var sampleProject = Project(
-        title: "Delay 300",
-        durationInDay: 35,
-        cost: 10.0,
-        hourlyCost: 2.0);
+    // get text entered in TextFormField and assign that as project title
+    String projectTitle = textController.text;
 
-    // if a Project with same name exists in database then give a warning message
-    // await keyword is used here to make flow to wait for this block execution
-    await projectList.forEach((element) {
-      if (sampleProject.title == element.title) {
-        print("Project with same title can't be added.");
-        isProjectNameSame = true;
-      }
-    });
+    // check if TextFormField is empty. If yes then give a warning message.
+    if (!projectTitle.isEmpty && !projectTitle.trim().isEmpty ) {
 
-    // if there is no Project wth same name then add Project to the Database and update UI
-    if (!isProjectNameSame) {
-      // insert a project into the database.
-      await mainScreenViewModel.insertProject(sampleProject);
+      var sampleProject = Project(title: projectTitle);
 
-      setState(() {
-        // We update UI by adding the Project to the list inside setState() method.
-        // We use "0" here for id because id is autoincremented by database
-        projectList.add(sampleProject);
+      // if a Project with same name exists in database then give a warning message
+      // await keyword is used here to make flow to wait for this block execution
+      await projectList.forEach((element) {
+        if (sampleProject.title == element.title) {
+          print("Project with same title can't be added.");
+          isProjectNameSame = true;
+        }
       });
+
+      // if there is no Project wth same name then add Project to the Database and update UI
+      if (!isProjectNameSame) {
+        // insert a project into the database.
+        await mainScreenViewModel.insertProject(sampleProject);
+
+        setState(() {
+          // We update UI by adding the Project to the list inside setState() method.
+          // We use "0" here for id because id is autoincremented by database
+          projectList.add(sampleProject);
+        });
+      }
+
+    } else {
+        var snackBar = SnackBar(content: Text('Project title can\'t be empty'));
+        _scaffoldKey.currentState.showSnackBar(snackBar);
+        print("Project title can\'t be empty");
     }
+
   }
 
   /**
@@ -105,11 +120,21 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    textController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Colors.green[800],
 
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.green[800],
+        elevation: 0.0,
         centerTitle: true,
         actions: <Widget>[
           PopupMenuButton<String>(
@@ -138,38 +163,75 @@ class _MainScreenState extends State<MainScreen> {
                 if (index == projectList.length) {
                   return null;
                 }
-                return ListTile(
-                  title: Text(projectList[index].title),
-                  leading: Text(projectList[index].id.toString()),
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 2.0),
+                  child: Card(
+                    elevation: 2.0,
+                    child: InkWell(
+                      splashColor: Colors.blue.withAlpha(30),
+                      onTap: () {
+                        print('Card tapped.');
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          ListTile(
+                            title: Text(projectList[index].title),
+                            leading: Text(projectList[index].id.toString()),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               }),
             ),
 
             //Buttom bar view
             Container(
-                height: 100.0,
                 width: double.infinity,
-                color: Colors.amberAccent,
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.fromLTRB(20.0, 16.0, 8.0, 16.0),
                   child: Row(
                     children: <Widget>[
+
+                      // TextFormField
                       Expanded(
-                          child: Text("Cuphead")),
-                      Expanded(
-                          child: Text("Mugman")),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.green
+                                ),
+                                borderRadius: BorderRadius.all(Radius.circular(45)),
+                              ),
+                              hintText: "Type new project title..",
+                              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                            ),
+                            controller: textController,
+                          )),
+
+                      // FAB
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 8.0, 0.0),
+                        child: Container(
+                            child: FloatingActionButton(
+                              backgroundColor: Colors.amberAccent,
+                              foregroundColor: Colors.green[800],
+                              onPressed: _addProject,
+                              tooltip: 'Add Project',
+                              child: Icon(Icons.add),
+                                ),
+                            ),
+                      ),
                     ],
                   ),
                 ),
             )
           ],
         ),
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addProject,
-        tooltip: 'Add Project',
-        child: Icon(Icons.add),
       ),
     );
   }
