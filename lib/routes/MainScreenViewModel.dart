@@ -1,6 +1,9 @@
 import 'package:bgsapp02082020/data/Project.dart';
 import 'package:bgsapp02082020/data/ProjectRepository.dart';
+import 'package:bgsapp02082020/routes/ProjectDetailsScreen.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'SettingsScreen.dart';
 
 class MainScreenViewModel {
 
@@ -21,6 +24,31 @@ class MainScreenViewModel {
   /// Custom method for updating a Project inside Database table
   Future<void> updateProject(Project project) async {
     projectRepository.updateProject(project);
+  }
+
+
+  /**
+      * Custom method for handling clicks on AppBar OverFlow menu
+      */
+  void handleAppBarClick(String value, BuildContext context) {
+    switch (value) {
+      case 'Settings':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SettingsScreen()),
+        );
+        break;
+    }
+  }
+
+  /**
+   * Custom method for navigating to ProjectDetailsScreen with chosen project data
+   */
+  void navigateToProjectDetailsScreen(BuildContext context, Project project) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ProjectDetailsScreen(project: project)),
+    );
   }
 
 }

@@ -80,8 +80,9 @@ class _MainScreenState extends State<MainScreen> {
       // await keyword is used here to make flow to wait for this block execution
       await projectList.forEach((element) {
         if (sampleProject.title == element.title) {
-          print("Project with same title can't be added.");
-          isProjectNameSame = true;
+          var snackBar = SnackBar(content: Text('Project with same title exists'));
+          _scaffoldKey.currentState.showSnackBar(snackBar);
+          isProjectNameSame = true; // make boolean true if there is a project with same name
         }
       });
 
@@ -108,15 +109,8 @@ class _MainScreenState extends State<MainScreen> {
   /**
    * Custom method for handling clicks on AppBar OverFlow menu
    */
-  void _handleClick(String value) {
-    switch (value) {
-      case 'Settings':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SettingsScreen()),
-        );
-        break;
-    }
+  void _handleAppBarClick(String value) {
+    mainScreenViewModel.handleAppBarClick(value, context);
   }
 
   @override
@@ -138,7 +132,7 @@ class _MainScreenState extends State<MainScreen> {
         centerTitle: true,
         actions: <Widget>[
           PopupMenuButton<String>(
-            onSelected: _handleClick,
+            onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
               return {'Settings'}.map((String choice) {
@@ -170,6 +164,7 @@ class _MainScreenState extends State<MainScreen> {
                     child: InkWell(
                       splashColor: Colors.blue.withAlpha(30),
                       onTap: () {
+                        mainScreenViewModel.navigateToProjectDetailsScreen(context, projectList[index]);
                         print('Card tapped.');
                       },
                       child: Column(
