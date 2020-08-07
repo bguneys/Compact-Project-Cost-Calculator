@@ -39,80 +39,6 @@ class _MainScreenState extends State<MainScreen> {
     populateProjectList();  //Custom method for populating projectList variable from database.
   }
 
-  /**
-   * Custom method for populating projectList variable from database.
-   */
-  void populateProjectList() {
-    mainScreenViewModel.getProjects().then((value) {
-      setState(() {
-        value.forEach((element) {
-          projectList.add(Project(
-              id: element.id,
-              title: element.title,
-              durationInDay: element.durationInDay,
-              cost: element.cost,
-              hourlyCost: element.hourlyCost));
-        });
-      });
-
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
-  /**
-   * Custom method for FAB Click
-   */
-  void _addProject() async {
-
-    // Boolean to check if a Project with same name exists in database
-    bool isProjectNameSame = false;
-
-    // get text entered in TextFormField and assign that as project title
-    String projectTitle = textController.text;
-
-    // check if TextFormField is empty. If yes then give a warning message.
-    if (!projectTitle.isEmpty && !projectTitle.trim().isEmpty ) {
-
-      var sampleProject = Project(title: projectTitle);
-
-      // if a Project with same name exists in database then give a warning message
-      // await keyword is used here to make flow to wait for this block execution
-      await projectList.forEach((element) {
-        if (sampleProject.title == element.title) {
-          var snackBar = SnackBar(content: Text('Project with same title exists'));
-          _scaffoldKey.currentState.showSnackBar(snackBar);
-          isProjectNameSame = true; // make boolean true if there is a project with same name
-        }
-      });
-
-      // if there is no Project wth same name then add Project to the Database and update UI
-      if (!isProjectNameSame) {
-        // insert a project into the database.
-        await mainScreenViewModel.insertProject(sampleProject);
-
-        setState(() {
-          // We update UI by adding the Project to the list inside setState() method.
-          // We use "0" here for id because id is autoincremented by database
-          projectList.add(sampleProject);
-        });
-      }
-
-    } else {
-        var snackBar = SnackBar(content: Text('Project title can\'t be empty'));
-        _scaffoldKey.currentState.showSnackBar(snackBar);
-        print("Project title can\'t be empty");
-    }
-
-  }
-
-  /**
-   * Custom method for handling clicks on AppBar OverFlow menu
-   */
-  void _handleAppBarClick(String value) {
-    mainScreenViewModel.handleAppBarClick(value, context);
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -184,46 +110,46 @@ class _MainScreenState extends State<MainScreen> {
 
             //Buttom bar view
             Container(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 16.0, 8.0, 16.0),
-                  child: Row(
-                    children: <Widget>[
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 16.0, 8.0, 16.0),
+                child: Row(
+                  children: <Widget>[
 
-                      // TextFormField
-                      Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
+                    // TextFormField
+                    Expanded(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
                                   color: Colors.green
-                                ),
-                                borderRadius: BorderRadius.all(Radius.circular(45)),
                               ),
-                              hintText: "Type new project title..",
-                              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                              borderRadius: BorderRadius.all(Radius.circular(45)),
                             ),
-                            controller: textController,
-                          )),
+                            hintText: "Type new project title..",
+                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                          ),
+                          controller: textController,
+                        )),
 
-                      // FAB
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 8.0, 0.0),
-                        child: Container(
-                            child: FloatingActionButton(
-                              backgroundColor: Colors.amberAccent,
-                              foregroundColor: Colors.green[800],
-                              onPressed: _addProject,
-                              tooltip: 'Add Project',
-                              child: Icon(Icons.add),
-                                ),
-                            ),
+                    // FAB
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 0.0, 8.0, 0.0),
+                      child: Container(
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.amberAccent,
+                          foregroundColor: Colors.green[800],
+                          onPressed: _addProject,
+                          tooltip: 'Add Project',
+                          child: Icon(Icons.add),
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),
             )
           ],
         ),
@@ -231,6 +157,77 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  /**
+   * Custom method for populating projectList variable from database.
+   */
+  void populateProjectList() {
+    mainScreenViewModel.getProjects().then((value) {
+      setState(() {
+        value.forEach((element) {
+          projectList.add(Project(
+              id: element.id,
+              title: element.title,
+              durationInDay: element.durationInDay,
+              cost: element.cost,
+              hourlyCost: element.hourlyCost));
+        });
+      });
 
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
+  /**
+   * Custom method for FAB Click
+   */
+  void _addProject() async {
+
+    // Boolean to check if a Project with same name exists in database
+    bool isProjectNameSame = false;
+
+    // get text entered in TextFormField and assign that as project title
+    String projectTitle = textController.text;
+
+    // check if TextFormField is empty. If yes then give a warning message.
+    if (!projectTitle.isEmpty && !projectTitle.trim().isEmpty ) {
+
+      var sampleProject = Project(title: projectTitle);
+
+      // if a Project with same name exists in database then give a warning message
+      // await keyword is used here to make flow to wait for this block execution
+      await projectList.forEach((element) {
+        if (sampleProject.title == element.title) {
+          var snackBar = SnackBar(content: Text('Project with same title exists'));
+          _scaffoldKey.currentState.showSnackBar(snackBar);
+          isProjectNameSame = true; // make boolean true if there is a project with same name
+        }
+      });
+
+      // if there is no Project wth same name then add Project to the Database and update UI
+      if (!isProjectNameSame) {
+        // insert a project into the database.
+        await mainScreenViewModel.insertProject(sampleProject);
+
+        setState(() {
+          // We update UI by adding the Project to the list inside setState() method.
+          projectList.add(sampleProject);
+        });
+      }
+
+    } else {
+        var snackBar = SnackBar(content: Text('Project title can\'t be empty'));
+        _scaffoldKey.currentState.showSnackBar(snackBar);
+        print("Project title can\'t be empty");
+    }
+
+  }
+
+  /**
+   * Custom method for handling clicks on AppBar OverFlow menu
+   */
+  void _handleAppBarClick(String value) {
+    mainScreenViewModel.handleAppBarClick(value, context);
+  }
 
 }

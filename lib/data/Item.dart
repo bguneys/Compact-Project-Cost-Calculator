@@ -1,26 +1,36 @@
 import 'dart:ffi';
 
+import 'package:bgsapp02082020/data/Constants.dart';
+
 class Item {
-  final int id;
-  final String title;
-  final int durationInDay;
-  final Float cost;
-  final Float hourlyCost;
+    final int id;
+    final String title;
+    final int durationInDay;
+    final Float cost;
+    final Float hourlyCost;
+    final int projectId;
 
   const Item({
       this.id,
       this.title,
       this.durationInDay,
       this.cost,
-      this.hourlyCost});
+      this.hourlyCost,
+      this.projectId,});
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'title': title,
-      'durationInDay': durationInDay,
-      'cost': cost,
-      'hourlyCost': hourlyCost,
+      Constants.columnItemId : id,
+      Constants.columnItemTitle: title,
+      Constants.columnItemDurationInDay: durationInDay,
+      Constants.columnItemCost: cost,
+      Constants.columnItemHourlyCost: hourlyCost,
+      Constants.columnItemProjectId: projectId
     };
+  }
+
+  @override
+  String toString() {
+      return ("id :" + id.toString() + " - title: " + title);
   }
 }

@@ -1,4 +1,6 @@
 import 'dart:ffi';
+import 'package:bgsapp02082020/data/Constants.dart';
+
 import 'Item.dart';
 
 class Project {
@@ -17,11 +19,11 @@ class Project {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'title': title,
-      'durationInDay': durationInDay,
-      'cost': cost,
-      'hourlyCost': hourlyCost,
+      Constants.columnProjectId : id,
+      Constants.columnProjectTitle : title,
+      Constants.columnProjectDurationInDay : durationInDay,
+      Constants.columnProjectCost : cost,
+      Constants.columnProjectHourlyCost : hourlyCost,
     };
   }
 

@@ -4,6 +4,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'Constants.dart';
+import 'Item.dart';
 import 'Project.dart';
 
 class ProjectDatabase {
@@ -24,22 +25,36 @@ class ProjectDatabase {
         join(await getDatabasesPath(), Constants.databaseName),
         // When the database is created first time, create a table to store data.
         onCreate: (db, version) {
-          return db.execute(
-            "CREATE TABLE ${Constants.databaseTable} (${Constants.columnId} INTEGER PRIMARY KEY AUTOINCREMENT, ${Constants.columnTitle} TEXT, ${Constants.columnDurationInDay} INTEGER, ${Constants.columnCost} REAL, ${Constants.columnHourly} REAL)",
+          // creating projects table
+          db.execute(
+            "CREATE TABLE ${Constants.databaseProjectTable} (${Constants.columnProjectId} INTEGER PRIMARY KEY AUTOINCREMENT, ${Constants.columnProjectTitle} TEXT, ${Constants.columnProjectDurationInDay} INTEGER, ${Constants.columnProjectCost} REAL, ${Constants.columnProjectHourlyCost} REAL)"
+          );
+
+          // creating items table with foreign key
+          db.execute(
+            "CREATE TABLE ${Constants.databaseItemTable} (${Constants.columnItemId} INTEGER PRIMARY KEY AUTOINCREMENT, ${Constants.columnItemTitle} TEXT, ${Constants.columnItemDurationInDay} INTEGER, ${Constants.columnItemCost} REAL, ${Constants.columnItemHourlyCost} REAL, ${Constants.columnItemProjectId} INTEGER, FOREIGN KEY(${Constants.columnItemProjectId}) REFERENCES ${Constants.databaseProjectTable}(${Constants.columnProjectId}))"
           );
         },
+        onConfigure: _onConfigure,
         version: Constants.databaseVersion,
       );
       return _database;
     }
   }
 
-  /// Custom method for inserting data into table
+  /**
+   *  Custom method to enable Foregin Key property in database
+   */
+  static Future _onConfigure(Database db) async {
+    await db.execute("PRAGMA foreign_keys = ON");
+  }
+
+  /// Custom method for inserting a Project into table
   Future<void> insertProject(Project project) async {
     final Database db = await projectDatabase.databaseInstance;
 
     await db.insert(
-      Constants.databaseTable,
+      Constants.databaseProjectTable,
       project.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -49,16 +64,16 @@ class ProjectDatabase {
   Future<List<Project>> getProjects() async {
     final Database db = await projectDatabase.databaseInstance;
 
-    final List<Map<String, dynamic>> maps = await db.query(Constants.databaseTable);
+    final List<Map<String, dynamic>> maps = await db.query(Constants.databaseProjectTable);
 
     // Convert the List<Map<String, dynamic> into a List<Project>.
     return List.generate(maps.length, (i) {
       return Project(
-        id: maps[i]['id'],
-        title: maps[i]['title'],
-        durationInDay: maps[i]['durationInDay'],
-        cost: maps[i]['cost'],
-        hourlyCost: maps[i]['hourlyCost'],
+        id: maps[i][Constants.columnProjectId],
+        title: maps[i][Constants.columnProjectTitle],
+        durationInDay: maps[i][Constants.columnProjectDurationInDay],
+        cost: maps[i][Constants.columnProjectCost],
+        hourlyCost: maps[i][Constants.columnProjectHourlyCost],
       );
     });
   }
@@ -68,12 +83,11 @@ class ProjectDatabase {
     final db = await projectDatabase.databaseInstance;
 
     await db.update(
-      Constants.databaseTable,
+      Constants.databaseProjectTable,
       project.toMap(),
-      where: "id = ?",
+      where: "${Constants.columnProjectId} = ?",
       whereArgs: [project.id],
     );
-
   }
 
   /// Custom method for deleting a Project from Database table
@@ -81,10 +95,53 @@ class ProjectDatabase {
     final db = await projectDatabase.databaseInstance;
 
     await db.delete(
-      Constants.databaseTable,
-      where: "id = ?",
+      Constants.databaseProjectTable,
+      where: "${Constants.columnProjectId} = ?",
       whereArgs: [project.id],
     );
-
   }
+
+  /// Custom method for inserting item into database
+  Future<void> insertItem(Item item) async {
+    final Database db = await projectDatabase.databaseInstance;
+
+    await db.insert(
+      Constants.databaseItemTable,
+      item.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  /// Custom method for getting all Items assigned to a Project from database
+  Future<List<Item>> getItemsWithProjectId(int itemProjectId) async {
+
+    final Database db = await projectDatabase.databaseInstance;
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM ${Constants.databaseItemTable} WHERE ${Constants.columnItemProjectId} = ?', [itemProjectId]);
+
+    // Convert the List<Map<String, dynamic> into a List<Item.
+    return List.generate(maps.length, (i) {
+      return Item(
+        id: maps[i][Constants.columnItemId],
+        title: maps[i][Constants.columnItemTitle],
+        durationInDay: maps[i][Constants.columnItemDurationInDay],
+        cost: maps[i][Constants.columnItemCost],
+        hourlyCost: maps[i][Constants.columnItemHourlyCost],
+        projectId: maps[i][Constants.columnItemProjectId],
+      );
+    });
+  }
+
+  /// Custom method for updating an Item inside Database table
+  Future<void> updateItem(Item item) async {
+    final db = await projectDatabase.databaseInstance;
+
+    await db.update(
+      Constants.databaseItemTable,
+      item.toMap(),
+      where: "${Constants.columnItemId} = ?",
+      whereArgs: [item.id],
+    );
+  }
+
 }
