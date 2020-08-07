@@ -73,11 +73,11 @@ class _MainScreenState extends State<MainScreen> {
       ),
 
       body: Container(
-
-        //ListView to show project list
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+
+            //ListView to show project list
             Expanded(
               child: ListView.builder(itemBuilder: (context, index) {
                 if (index == projectList.length) {

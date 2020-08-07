@@ -35,6 +35,8 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   @override
   void initState() {
     super.initState();
+
+    populateItemList(); // Custom method for populating itemList variable from database.
   }
 
   @override
@@ -43,7 +45,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
       backgroundColor: Colors.green[800],
 
       appBar: AppBar(
-        title: Text("Project Title"),
+        title: Text(project.title),
         backgroundColor: Colors.green[800],
         elevation: 0.0,
         centerTitle: true,
@@ -63,12 +65,52 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
         ],
       ),
 
-      body: Center(
-        child: Text("Hello"),
+      body: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+
+              //ListView
+              Expanded(
+                child: ListView.builder(itemBuilder: (context, index) {
+                  if (index == itemList.length) {
+                    return null;
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 2.0),
+                     child: InkWell(
+                       splashColor: Colors.blue.withAlpha(30),
+                       onTap: () {
+                         //projectDetailsScreenViewModel.navigateToAddItemScreen(context, itemList[index]);
+                         print('Item tapped.');
+                       },
+                       child: Column(
+                         mainAxisSize: MainAxisSize.max,
+                         children: <Widget>[
+                           ListTile(
+                             title: Text(itemList[index].title),
+                             leading: Text(itemList[index].id.toString()),
+                           ),
+                         ],
+                       )
+                     ),
+                  );
+                }),
+              ),
+
+            ],
+        ),
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: populateItemList,
+        backgroundColor: Colors.amberAccent,
+        foregroundColor: Colors.green[800],
+        tooltip: 'Add Item',
+        child: Icon(Icons.add),
+        onPressed: () {
+          projectDetailsScreenViewModel.navigateToAddItemScreen(context);
+        },
       ),
     );
   }
@@ -104,15 +146,11 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
    * Custom method for database testing
    */
   void _addItemsToDatabase() async {
-    var sampleItem3 = Item(id: 3, title: "Test Item 3", projectId: 2);
+    var sampleItem = Item(id: 3, title: "Test Item 3", projectId: 1);
 
     // insert a project into the database.
-    await projectDetailsScreenViewModel.insertItem(sampleItem3);
+    await projectDetailsScreenViewModel.insertItem(sampleItem);
 
-    await populateItemList();
-
-    itemList.forEach((element) {
-      print("Item:  " + element.toString());
-    });
+    itemList.add(sampleItem);
   }
 }

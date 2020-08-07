@@ -1,6 +1,8 @@
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
 import 'package:flutter/material.dart';
+import 'AddItemScreen.dart';
+import 'EditItemScreen.dart';
 import 'SettingsScreen.dart';
 
 class ProjectDetailsScreenViewModel {
@@ -36,5 +38,25 @@ class ProjectDetailsScreenViewModel {
         );
         break;
     }
+  }
+
+  /**
+   * Custom method for navigating to EditItemScreen with chosen project data
+   */
+  void navigateToEditItemScreen(BuildContext context, Item item) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditItemScreen(item: item)),
+    );
+  }
+
+  /**
+   * Custom method for navigating to AddItemScreen with chosen project data
+   */
+  void navigateToAddItemScreen(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddItemScreen()),
+    );
   }
 }
