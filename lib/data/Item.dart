@@ -6,8 +6,8 @@ class Item {
     final int id;
     final String title;
     final int durationInDay;
-    final Float cost;
-    final Float hourlyCost;
+    final double cost;
+    final double hourlyCost;
     final int projectId;
 
   const Item({

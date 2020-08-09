@@ -109,7 +109,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
         tooltip: 'Add Item',
         child: Icon(Icons.add),
         onPressed: () {
-          projectDetailsScreenViewModel.navigateToAddItemScreen(context);
+          projectDetailsScreenViewModel.navigateToAddItemScreen(context, project);
         },
       ),
     );

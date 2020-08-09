@@ -1,5 +1,8 @@
+import 'dart:ffi';
+
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
+import 'ProjectDetailsScreen.dart';
 import 'SettingsScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +18,8 @@ class AddItemScreenViewModel {
   }
 
   /**
-      * Custom method for handling clicks on AppBar OverFlow menu
-      */
+   * Custom method for handling clicks on AppBar OverFlow menu
+   */
   void handleAppBarClick(String value, BuildContext context) {
     switch (value) {
       case 'Settings':
@@ -28,5 +31,14 @@ class AddItemScreenViewModel {
     }
   }
 
+  /**
+   * Custom method for navigating to ProjectDetailsScreen
+   */
+  void navigateToProjectDetailsScreen(BuildContext context, project) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ProjectDetailsScreen(project: project,)),
+    );
+  }
 
 }

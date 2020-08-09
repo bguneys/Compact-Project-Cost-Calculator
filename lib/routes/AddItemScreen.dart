@@ -1,28 +1,40 @@
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
+import 'package:bgsapp02082020/data/Project.dart';
+import 'package:bgsapp02082020/routes/ProjectDetailsScreen.dart';
 import 'package:flutter/material.dart';
 
 import 'AddItemScreenViewModel.dart';
 
 class AddItemScreen extends StatefulWidget {
+  final Project project;
 
-  // In the constructor, we create an object with Item obtained from ProjectDetailsScreen
-  AddItemScreen({Key key}) : super(key: key);
+  // In the constructor, we create an object with Project obtained from ProjectDetailsScreen
+  AddItemScreen({Key key, @required this.project}) : super(key: key);
 
   @override
-  _AddItemScreenState createState() => _AddItemScreenState();
+  _AddItemScreenState createState() => _AddItemScreenState(project: project);
 }
 
 class _AddItemScreenState extends State<AddItemScreen> {
+  final Project project;
 
-  // create ProjectDatabase through creating ProjectRepository instance
-  static final itemRepository = ItemRepository.getInstance();
+  // In constructor we create an object with Project obtained from AddItemScreen
+  _AddItemScreenState({@required this.project});
 
-  // create ViewModel
-  final addItemScreenViewModel = AddItemScreenViewModel(itemRepository);
+  static final itemRepository = ItemRepository.getInstance();   // create ProjectDatabase through creating ProjectRepository instance
 
-  // Global key for form
-  final _formKey = GlobalKey<FormState>();
+  final addItemScreenViewModel = AddItemScreenViewModel(itemRepository);   // create ViewModel
+
+  final _formKey = GlobalKey<FormState>();   // Global key for form
+
+  String _totalCostString = "0.00"; // total cost calculated for each input
+
+  //TextEditControllers for each TextFormField
+  final titleTextFieldController = TextEditingController();
+  final hourlryCostTextFieldController = TextEditingController();
+  final daysTextFieldController = TextEditingController();
+  final workHoursADayTextFieldController = TextEditingController();
 
 
   @override
@@ -56,6 +68,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
                     child: Row(
@@ -67,12 +80,24 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
-                            child: TextFormField(),
+                            child: TextFormField(
+                              controller: titleTextFieldController,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "Please enter some value";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                labelText: "Title: "
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
                     child: Row(
@@ -84,12 +109,24 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
-                                child: TextFormField(),
+                                child: TextFormField(
+                                  controller: hourlryCostTextFieldController,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Please enter some value";
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: "Hourly Cost : "
+                                  ),
+                                ),
                               ),
                           ),
                       ],
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
                     child: Row(
@@ -101,12 +138,24 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
-                            child: TextFormField(),
+                            child: TextFormField(
+                              controller: daysTextFieldController,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "Please enter some value";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                labelText: "Duration (days): ",
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
                     child: Row(
@@ -118,23 +167,62 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
-                            child: TextFormField(),
+                            child: TextFormField(
+                              controller: workHoursADayTextFieldController,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return "Please enter some value";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                labelText: "Work Hours in a Day: ",
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
+
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 0.0),
-                    child: Text("Total Cost: 100"),
+                    child: Text(_totalCostString),
                   ),
+
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 0.0),
                       child: RaisedButton(
                         child: Text('Add'),
-                        onPressed: () {
-                          print("Item added.");
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+
+                            // calculate total cost from inputs
+                            String titleString = titleTextFieldController.text;
+                            String hourlyCostString = hourlryCostTextFieldController.text;
+                            String daysString = daysTextFieldController.text;
+                            String workHoursInADayString = workHoursADayTextFieldController.text;
+
+                            double hourlyCost = double.parse(hourlyCostString);
+                            int days = int.parse(daysString);
+                            double workHoursInADay = double.parse(workHoursInADayString);
+
+                            double totalCost = (hourlyCost * workHoursInADay) * days;
+
+                            // insert Item to the database
+                            var item = Item(title: titleString,
+                                hourlyCost: hourlyCost,
+                                durationInDay: days,
+                            cost: totalCost,
+                            projectId: project.id);
+                            await addItemScreenViewModel.insertItem(item);
+
+                            // go to ProjectDetailsScreen after inserting Item into database
+                            addItemScreenViewModel.navigateToProjectDetailsScreen(context, project);
+
+                            //print("title: " + titleString + " - hourlyCost: " + hourlyCost.toString() + " - days: " + days.toString() + " - total cost " + totalCost.toString() + " - projectId: " + project.id.toString());
+                          }
                         }
                       ),
                     ),
@@ -146,10 +234,23 @@ class _AddItemScreenState extends State<AddItemScreen> {
     );
   }
 
+
+  @override
+  void dispose() {
+    titleTextFieldController.dispose();
+    hourlryCostTextFieldController.dispose();
+    daysTextFieldController.dispose();
+    workHoursADayTextFieldController.dispose();
+    
+    super.dispose();
+
+  }
+
   /**
    * Custom method for handling clicks on AppBar OverFlow menu
    */
   void _handleAppBarClick(String value) {
     addItemScreenViewModel.handleAppBarClick(value, context);
   }
+
 }
