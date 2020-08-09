@@ -3,6 +3,7 @@ import 'package:bgsapp02082020/data/ItemRepository.dart';
 import 'package:bgsapp02082020/data/Project.dart';
 import 'package:bgsapp02082020/routes/ProjectDetailsScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'AddItemScreenViewModel.dart';
 
@@ -32,7 +33,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   //TextEditControllers for each TextFormField
   final titleTextFieldController = TextEditingController();
-  final hourlryCostTextFieldController = TextEditingController();
+  final hourlyCostTextFieldController = TextEditingController();
   final daysTextFieldController = TextEditingController();
   final workHoursADayTextFieldController = TextEditingController();
 
@@ -110,7 +111,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
                                 child: TextFormField(
-                                  controller: hourlryCostTextFieldController,
+                                  controller: hourlyCostTextFieldController,
+                                  keyboardType: TextInputType.number,
+                                  onChanged: _calculateTotalCost,
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       return "Please enter some value";
@@ -140,6 +143,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
                             child: TextFormField(
                               controller: daysTextFieldController,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                WhitelistingTextInputFormatter.digitsOnly
+                              ],
+                              onChanged: _calculateTotalCost,
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return "Please enter some value";
@@ -169,6 +177,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
                             child: TextFormField(
                               controller: workHoursADayTextFieldController,
+                              keyboardType: TextInputType.number,
+                              onChanged: _calculateTotalCost,
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return "Please enter some value";
@@ -200,7 +210,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
                             // calculate total cost from inputs
                             String titleString = titleTextFieldController.text;
-                            String hourlyCostString = hourlryCostTextFieldController.text;
+                            String hourlyCostString = hourlyCostTextFieldController.text;
                             String daysString = daysTextFieldController.text;
                             String workHoursInADayString = workHoursADayTextFieldController.text;
 
@@ -238,7 +248,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   @override
   void dispose() {
     titleTextFieldController.dispose();
-    hourlryCostTextFieldController.dispose();
+    hourlyCostTextFieldController.dispose();
     daysTextFieldController.dispose();
     workHoursADayTextFieldController.dispose();
     
@@ -251,6 +261,38 @@ class _AddItemScreenState extends State<AddItemScreen> {
    */
   void _handleAppBarClick(String value) {
     addItemScreenViewModel.handleAppBarClick(value, context);
+  }
+
+  /**
+   * Custom method for calculatig total cost.
+   * If one of the TextFormField is empty then totalCost String is shown zero
+   */
+  void _calculateTotalCost(String value) {
+
+      // calculate total cost from inputs
+      String hourlyCostString = hourlyCostTextFieldController.text;
+      String daysString = daysTextFieldController.text;
+      String workHoursInADayString = workHoursADayTextFieldController.text;
+
+      setState(() {
+
+        if (hourlyCostString.isEmpty || daysString.isEmpty || workHoursInADayString.isEmpty) {
+          //do nothing
+          print("Warning total cost: 0");
+          _totalCostString = "Total Cost: 0.00"; // if not all fields entered then total cost shown zero
+
+        } else {
+          double hourlyCost = double.parse(hourlyCostString);
+          int days = int.parse(daysString);
+          double workHoursInADay = double.parse(workHoursInADayString);
+
+          double totalCost = (hourlyCost * workHoursInADay) * days;
+
+          _totalCostString = "Total Cost: " + totalCost.toStringAsFixed(2); // String with 2 digits after comma
+        }
+
+      });
+
   }
 
 }
