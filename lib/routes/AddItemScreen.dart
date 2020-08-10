@@ -4,7 +4,6 @@ import 'package:bgsapp02082020/data/Project.dart';
 import 'package:bgsapp02082020/routes/ProjectDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'AddItemScreenViewModel.dart';
 
 class AddItemScreen extends StatefulWidget {
@@ -29,7 +28,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   final _formKey = GlobalKey<FormState>();   // Global key for form
 
-  String _totalCostString = "0.00"; // total cost calculated for each input
+  String _totalCostString = "Total Cost: 0.00"; // total cost calculated for each input
 
   //TextEditControllers for each TextFormField
   final titleTextFieldController = TextEditingController();
@@ -66,178 +65,153 @@ class _AddItemScreenState extends State<AddItemScreen> {
       body: Container(
             child: Form(
               key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
 
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Text("Item Title: "),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
-                            child: TextFormField(
-                              controller: titleTextFieldController,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Please enter some value";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: "Title: "
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Text("Hourly Cost: "),
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                      child: Row(
+                        children: <Widget>[
                           Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
-                                child: TextFormField(
-                                  controller: hourlyCostTextFieldController,
-                                  keyboardType: TextInputType.number,
-                                  onChanged: _calculateTotalCost,
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return "Please enter some value";
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                      labelText: "Hourly Cost : "
-                                  ),
+                            child: TextFormField(
+                                controller: titleTextFieldController,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Please enter some value";
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  labelText: "Title: "
                                 ),
                               ),
                           ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Text("Duration (days): "),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
-                            child: TextFormField(
-                              controller: daysTextFieldController,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: <TextInputFormatter>[
-                                WhitelistingTextInputFormatter.digitsOnly
-                              ],
-                              onChanged: _calculateTotalCost,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Please enter some value";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: "Duration (days): ",
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 20.0, 16.0, 20.0),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                          child: Text("Work Hours in a Day: "),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 0.0, 0.0),
-                            child: TextFormField(
-                              controller: workHoursADayTextFieldController,
-                              keyboardType: TextInputType.number,
-                              onChanged: _calculateTotalCost,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return "Please enter some value";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelText: "Work Hours in a Day: ",
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 0.0),
-                    child: Text(_totalCostString),
-                  ),
-
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 0.0),
-                      child: RaisedButton(
-                        child: Text('Add'),
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-
-                            // calculate total cost from inputs
-                            String titleString = titleTextFieldController.text;
-                            String hourlyCostString = hourlyCostTextFieldController.text;
-                            String daysString = daysTextFieldController.text;
-                            String workHoursInADayString = workHoursADayTextFieldController.text;
-
-                            double hourlyCost = double.parse(hourlyCostString);
-                            int days = int.parse(daysString);
-                            double workHoursInADay = double.parse(workHoursInADayString);
-
-                            double totalCost = (hourlyCost * workHoursInADay) * days;
-
-                            // insert Item to the database
-                            var item = Item(title: titleString,
-                                hourlyCost: hourlyCost,
-                                durationInDay: days,
-                            cost: totalCost,
-                            projectId: project.id);
-                            await addItemScreenViewModel.insertItem(item);
-
-                            // go to ProjectDetailsScreen after inserting Item into database
-                            addItemScreenViewModel.navigateToProjectDetailsScreen(context, project);
-
-                            //print("title: " + titleString + " - hourlyCost: " + hourlyCost.toString() + " - days: " + days.toString() + " - total cost " + totalCost.toString() + " - projectId: " + project.id.toString());
-                          }
-                        }
+                        ],
                       ),
                     ),
-                  ),
-                ]
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                      child: Row(
+                        children: <Widget>[
+                            Expanded(
+                                child: TextFormField(
+                                    controller: hourlyCostTextFieldController,
+                                    keyboardType: TextInputType.number,
+                                    onChanged: _calculateTotalCost,
+                                    validator: (value) {
+                                      if (value.isEmpty) {
+                                        return "Please enter some value";
+                                      }
+                                      return null;
+                                    },
+                                    decoration: InputDecoration(
+                                        labelText: "Hourly Cost : "
+                                    ),
+                                  ),
+                            ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TextFormField(
+                                controller: daysTextFieldController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  WhitelistingTextInputFormatter.digitsOnly
+                                ],
+                                onChanged: _calculateTotalCost,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Please enter some value";
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  labelText: "Duration (days): ",
+                                ),
+                              ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TextFormField(
+                                controller: workHoursADayTextFieldController,
+                                keyboardType: TextInputType.number,
+                                onChanged: _calculateTotalCost,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return "Please enter some value";
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  labelText: "Work Hours in a Day: ",
+                                ),
+                              ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
+                      child: Text(_totalCostString),
+                    ),
+
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
+                        child: RaisedButton(
+                          child: Text('Add'),
+                          onPressed: () async {
+                            if (_formKey.currentState.validate()) {
+
+                              // calculate total cost from inputs
+                              String titleString = titleTextFieldController.text;
+                              String hourlyCostString = hourlyCostTextFieldController.text;
+                              String daysString = daysTextFieldController.text;
+                              String workHoursInADayString = workHoursADayTextFieldController.text;
+
+                              double hourlyCost = double.parse(hourlyCostString);
+                              int days = int.parse(daysString);
+                              double workHoursInADay = double.parse(workHoursInADayString);
+
+                              double totalCost = (hourlyCost * workHoursInADay) * days;
+
+                              // insert Item to the database
+                              var item = Item(title: titleString,
+                                  hourlyCost: hourlyCost,
+                                  durationInDay: days,
+                              cost: totalCost,
+                              projectId: project.id);
+                              await addItemScreenViewModel.insertItem(item);
+
+                              // go to ProjectDetailsScreen after inserting Item into database
+                              addItemScreenViewModel.navigateToProjectDetailsScreen(context, project);
+
+                              //print("title: " + titleString + " - hourlyCost: " + hourlyCost.toString() + " - days: " + days.toString() + " - total cost " + totalCost.toString() + " - projectId: " + project.id.toString());
+                            }
+                          }
+                        ),
+                      ),
+                    ),
+                  ]
+                ),
               ),
             ),
       ),

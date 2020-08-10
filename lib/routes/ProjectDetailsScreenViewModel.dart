@@ -1,5 +1,6 @@
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
+import 'package:bgsapp02082020/data/Project.dart';
 import 'package:flutter/material.dart';
 import 'AddItemScreen.dart';
 import 'EditItemScreen.dart';
@@ -43,10 +44,10 @@ class ProjectDetailsScreenViewModel {
   /**
    * Custom method for navigating to EditItemScreen with chosen project data
    */
-  void navigateToEditItemScreen(BuildContext context, Item item) {
+  void navigateToEditItemScreen(BuildContext context, Item item, Project project) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditItemScreen(item: item)),
+      MaterialPageRoute(builder: (context) => EditItemScreen(item: item, project: project)),
     );
   }
 

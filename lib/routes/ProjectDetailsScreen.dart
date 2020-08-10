@@ -82,7 +82,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                      child: InkWell(
                        splashColor: Colors.blue.withAlpha(30),
                        onTap: () {
-                         //projectDetailsScreenViewModel.navigateToAddItemScreen(context, itemList[index]);
+                         projectDetailsScreenViewModel.navigateToEditItemScreen(context, itemList[index], project);
                          print('Item tapped.');
                        },
                        child: Column(
