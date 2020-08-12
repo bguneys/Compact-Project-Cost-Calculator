@@ -47,8 +47,10 @@ class _EditItemScreenState extends State<EditItemScreen> {
     titleTextFieldController.text = item.title;
     hourlyCostTextFieldController.text = item.hourlyCost.toString();
     daysTextFieldController.text = item.durationInDay.toString();
-    workHoursADayTextFieldController.text = (8).toString(); //TODO: Add field to Item data model
+    workHoursADayTextFieldController.text = item.workHoursInADay.toString();
     _totalCostString = item.cost.toString();
+
+    print("Item prop: title: " + item.title + " - hourlyCost: " + item.hourlyCost.toString() + " - workHours: " + item.workHoursInADay.toString());
   }
 
   @override
@@ -213,6 +215,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                                     hourlyCost: hourlyCost,
                                                     durationInDay: days,
                                                     cost: totalCost,
+                                                    workHoursInADay: workHoursInADay,
                                                     projectId: project.id);
 
                               await editItemScreenViewModel.updateItem(editedItem);

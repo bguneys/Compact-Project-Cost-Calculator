@@ -32,7 +32,7 @@ class ProjectDatabase {
 
           // creating items table with foreign key
           db.execute(
-            "CREATE TABLE ${Constants.databaseItemTable} (${Constants.columnItemId} INTEGER PRIMARY KEY AUTOINCREMENT, ${Constants.columnItemTitle} TEXT, ${Constants.columnItemDurationInDay} INTEGER, ${Constants.columnItemCost} REAL, ${Constants.columnItemHourlyCost} REAL, ${Constants.columnItemProjectId} INTEGER, FOREIGN KEY(${Constants.columnItemProjectId}) REFERENCES ${Constants.databaseProjectTable}(${Constants.columnProjectId}))"
+            "CREATE TABLE ${Constants.databaseItemTable} (${Constants.columnItemId} INTEGER PRIMARY KEY AUTOINCREMENT, ${Constants.columnItemTitle} TEXT, ${Constants.columnItemDurationInDay} INTEGER, ${Constants.columnItemCost} REAL, ${Constants.columnItemHourlyCost} REAL, ${Constants.columnItemWorkHoursInADay} REAL, ${Constants.columnItemProjectId} INTEGER, FOREIGN KEY(${Constants.columnItemProjectId}) REFERENCES ${Constants.databaseProjectTable}(${Constants.columnProjectId}))"
           );
         },
         onConfigure: _onConfigure,
@@ -127,6 +127,7 @@ class ProjectDatabase {
         durationInDay: maps[i][Constants.columnItemDurationInDay],
         cost: maps[i][Constants.columnItemCost],
         hourlyCost: maps[i][Constants.columnItemHourlyCost],
+        workHoursInADay: maps[i][Constants.columnItemWorkHoursInADay],
         projectId: maps[i][Constants.columnItemProjectId],
       );
     });

@@ -41,7 +41,7 @@ class EditItemScreenViewModel {
   void navigateToProjectDetailsScreen(BuildContext context, project) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ProjectDetailsScreen(project: project,)),
+      MaterialPageRoute(builder: (context) => ProjectDetailsScreen(project: project)),
     );
   }
 

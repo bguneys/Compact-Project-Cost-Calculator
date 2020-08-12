@@ -79,32 +79,34 @@ class _MainScreenState extends State<MainScreen> {
 
             //ListView to show project list
             Expanded(
-              child: ListView.builder(itemBuilder: (context, index) {
-                if (index == projectList.length) {
-                  return null;
-                }
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 2.0),
-                  child: Card(
-                    elevation: 2.0,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        mainScreenViewModel.navigateToProjectDetailsScreen(context, projectList[index]);
-                        print('Card tapped.');
-                      },
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          ListTile(
-                            title: Text(projectList[index].title),
-                            leading: Text(projectList[index].id.toString()),
-                          ),
-                        ],
+              child: ListView.builder(
+                itemCount: projectList.length,
+                itemBuilder: (context, index) {
+                  if (index == projectList.length) {
+                    return null;
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 2.0),
+                    child: Card(
+                      elevation: 2.0,
+                      child: InkWell(
+                        splashColor: Colors.blue.withAlpha(30),
+                        onTap: () {
+                          mainScreenViewModel.navigateToProjectDetailsScreen(context, projectList[index]);
+                          print('Card tapped.');
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            ListTile(
+                              title: Text(projectList[index].title),
+                              leading: Text(projectList[index].id.toString()),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
+                  );
               }),
             ),
 
@@ -179,6 +181,24 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   /**
+   * Custom method for populating projectList variable from database.
+   */
+  void populateProjectList2() {
+    mainScreenViewModel.getProjects().then((value) {
+        value.forEach((element) {
+          projectList.add(Project(
+              id: element.id,
+              title: element.title,
+              durationInDay: element.durationInDay,
+              cost: element.cost,
+              hourlyCost: element.hourlyCost));
+        });
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
+  /**
    * Custom method for FAB Click
    */
   void _addProject() async {
@@ -207,12 +227,9 @@ class _MainScreenState extends State<MainScreen> {
       // if there is no Project wth same name then add Project to the Database and update UI
       if (!isProjectNameSame) {
         // insert a project into the database.
+        projectList.clear();
         await mainScreenViewModel.insertProject(sampleProject);
-
-        setState(() {
-          // We update UI by adding the Project to the list inside setState() method.
-          projectList.add(sampleProject);
-        });
+        populateProjectList();
       }
 
     } else {

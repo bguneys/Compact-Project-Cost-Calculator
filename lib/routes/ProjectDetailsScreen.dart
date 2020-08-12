@@ -32,9 +32,13 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   //Item list variable to store Items from database
   List<Item> itemList = new List();
 
+  int projectId;
+
   @override
   void initState() {
     super.initState();
+
+    projectId = project.id;
 
     populateItemList(); // Custom method for populating itemList variable from database.
   }
@@ -90,7 +94,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                          children: <Widget>[
                            ListTile(
                              title: Text(itemList[index].title),
-                             leading: Text(itemList[index].id.toString()),
+                             leading: Text(itemList[index].workHoursInADay.toString()),
                            ),
                          ],
                        )
@@ -126,7 +130,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
    * Custom method for populating itemList variable from database.
    */
   void populateItemList() {
-    projectDetailsScreenViewModel.getItemWithProjectId(project.id).then((value) {
+    projectDetailsScreenViewModel.getItemWithProjectId(projectId).then((value) {
       setState(() {
         value.forEach((element) {
           itemList.add(Item(
@@ -134,7 +138,8 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
               title: element.title,
               durationInDay: element.durationInDay,
               cost: element.cost,
-              hourlyCost: element.hourlyCost));
+              hourlyCost: element.hourlyCost,
+              workHoursInADay: element.workHoursInADay));
         });
       });
     }).catchError((error) {

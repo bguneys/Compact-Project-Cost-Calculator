@@ -30,11 +30,20 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   String _totalCostString = "Total Cost: 0.00"; // total cost calculated for each input
 
+  int projectId;
+
   //TextEditControllers for each TextFormField
   final titleTextFieldController = TextEditingController();
   final hourlyCostTextFieldController = TextEditingController();
   final daysTextFieldController = TextEditingController();
   final workHoursADayTextFieldController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    projectId = project.id;
+  }
 
 
   @override
@@ -197,9 +206,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               var item = Item(title: titleString,
                                   hourlyCost: hourlyCost,
                                   durationInDay: days,
-                              cost: totalCost,
-                              projectId: project.id);
-                              await addItemScreenViewModel.insertItem(item);
+                                  cost: totalCost,
+                                  workHoursInADay: workHoursInADay,
+                                  projectId: projectId);
+
+                                 await addItemScreenViewModel.insertItem(item);
 
                               // go to ProjectDetailsScreen after inserting Item into database
                               addItemScreenViewModel.navigateToProjectDetailsScreen(context, project);

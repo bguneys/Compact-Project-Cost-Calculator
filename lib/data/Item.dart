@@ -8,6 +8,7 @@ class Item {
     final int durationInDay;
     final double cost;
     final double hourlyCost;
+    final double workHoursInADay;
     final int projectId;
 
   const Item({
@@ -16,7 +17,8 @@ class Item {
       this.durationInDay,
       this.cost,
       this.hourlyCost,
-      this.projectId,});
+      this.workHoursInADay,
+      this.projectId});
 
   Map<String, dynamic> toMap() {
     return {
@@ -25,7 +27,8 @@ class Item {
       Constants.columnItemDurationInDay: durationInDay,
       Constants.columnItemCost: cost,
       Constants.columnItemHourlyCost: hourlyCost,
-      Constants.columnItemProjectId: projectId
+      Constants.columnItemWorkHoursInADay: workHoursInADay,
+      Constants.columnItemProjectId: projectId,
     };
   }
 
