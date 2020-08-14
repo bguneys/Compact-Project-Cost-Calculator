@@ -112,6 +112,17 @@ class ProjectDatabase {
     );
   }
 
+  /// Custom method for deleting a Project from Database table
+  Future<void> deleteItem(Item item) async {
+    final db = await projectDatabase.databaseInstance;
+
+    await db.delete(
+      Constants.databaseItemTable,
+      where: "${Constants.columnItemId} = ?",
+      whereArgs: [item.id],
+    );
+  }
+
   /// Custom method for getting all Items assigned to a Project from database
   Future<List<Item>> getItemsWithProjectId(int itemProjectId) async {
 

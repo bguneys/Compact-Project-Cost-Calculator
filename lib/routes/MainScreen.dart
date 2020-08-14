@@ -95,6 +95,10 @@ class _MainScreenState extends State<MainScreen> {
                           mainScreenViewModel.navigateToProjectDetailsScreen(context, projectList[index]);
                           print('Card tapped.');
                         },
+                        onLongPress: () {
+                          _deleteProject(projectList[index]);
+                          populateProjectList();
+                        },
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
@@ -163,6 +167,8 @@ class _MainScreenState extends State<MainScreen> {
    * Custom method for populating projectList variable from database.
    */
   void populateProjectList() {
+    projectList.clear();
+
     mainScreenViewModel.getProjects().then((value) {
       setState(() {
         value.forEach((element) {
@@ -175,24 +181,6 @@ class _MainScreenState extends State<MainScreen> {
         });
       });
 
-    }).catchError((error) {
-      print(error);
-    });
-  }
-
-  /**
-   * Custom method for populating projectList variable from database.
-   */
-  void populateProjectList2() {
-    mainScreenViewModel.getProjects().then((value) {
-        value.forEach((element) {
-          projectList.add(Project(
-              id: element.id,
-              title: element.title,
-              durationInDay: element.durationInDay,
-              cost: element.cost,
-              hourlyCost: element.hourlyCost));
-        });
     }).catchError((error) {
       print(error);
     });
@@ -227,7 +215,6 @@ class _MainScreenState extends State<MainScreen> {
       // if there is no Project wth same name then add Project to the Database and update UI
       if (!isProjectNameSame) {
         // insert a project into the database.
-        projectList.clear();
         await mainScreenViewModel.insertProject(sampleProject);
         populateProjectList();
       }
@@ -245,6 +232,13 @@ class _MainScreenState extends State<MainScreen> {
    */
   void _handleAppBarClick(String value) {
     mainScreenViewModel.handleAppBarClick(value, context);
+  }
+
+  /**
+   * Custom method for deleting an item from the list
+   */
+  void _deleteProject(Project project) async {
+    await mainScreenViewModel.deleteProject(project);
   }
 
 }

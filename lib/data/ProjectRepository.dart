@@ -25,6 +25,11 @@ class ProjectRepository {
     _projectDatabase.insertProject(project);
   }
 
+  /// Custom method for deleting a Project from Database
+  Future<void> deleteProject(Project project) async {
+    _projectDatabase.deleteProject(project);
+  }
+
   /// Custom method for getting all Project list from database
   Future<List<Project>> getProjects() async {
     return _projectDatabase.getProjects();

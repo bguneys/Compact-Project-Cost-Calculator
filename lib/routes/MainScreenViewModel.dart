@@ -16,6 +16,11 @@ class MainScreenViewModel {
     projectRepository.insertProject(project);
   }
 
+  /// Custom method for deleting a Project from Database
+  Future<void> deleteProject(Project project) async {
+    projectRepository.deleteProject(project);
+  }
+
   /// Custom method for getting all Project list from database
   Future<List<Project>> getProjects() async {
     return projectRepository.getProjects();

@@ -22,7 +22,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   // In constructor we create an object with Project obtained from AddItemScreen
   _AddItemScreenState({@required this.project});
 
-  static final itemRepository = ItemRepository.getInstance();   // create ProjectDatabase through creating ProjectRepository instance
+  static final itemRepository = ItemRepository.getInstance();   // create ProjectDatabase through creating ItemRepository instance
 
   final addItemScreenViewModel = AddItemScreenViewModel(itemRepository);   // create ViewModel
 

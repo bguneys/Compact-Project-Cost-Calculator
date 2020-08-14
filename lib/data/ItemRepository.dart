@@ -26,6 +26,11 @@ class ItemRepository {
     _projectDatabase.insertItem(item);
   }
 
+  /// Custom method for deleting an Item from Database table
+  Future<void> deleteItem(Item item) async {
+    _projectDatabase.deleteItem(item);
+  }
+
   /// Custom method for getting all Item list addiged to a Project from database
   Future<List<Item>> getItemsWithProjectId(int itemProjectId) async {
     return _projectDatabase.getItemsWithProjectId(itemProjectId);

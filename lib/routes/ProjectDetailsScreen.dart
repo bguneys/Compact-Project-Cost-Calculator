@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
 import 'package:bgsapp02082020/data/Project.dart';
+import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/ProjectDetailsScreenViewModel.dart';
 import 'package:flutter/material.dart';
 
@@ -22,17 +25,25 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   // In constructor we create an object with Project obtained from ProjectDetailsScreen
   _ProjectDetailsScreenState({@required this.project});
 
-  // create ProjectDatabase through creating ProjectRepository instance
+  // create ProjectDatabase through creating ItemRepository instance
   static final itemRepository = ItemRepository.getInstance();
+
+  // create ProjectDatabase through creating ProjectRepository instance
+  static final projectRepository = ProjectRepository.getInstance();
 
   // create ViewModel
   final projectDetailsScreenViewModel =
-      ProjectDetailsScreenViewModel(itemRepository);
+      ProjectDetailsScreenViewModel(itemRepository, projectRepository);
 
   //Item list variable to store Items from database
   List<Item> itemList = new List();
 
   int projectId;
+
+  double totalProjectCost;
+  int totalProjectDuration;
+  double totalProjectHourlyCost;
+  String projectCurrencyString = "\$";
 
   @override
   void initState() {
@@ -82,40 +93,90 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                   }
 
                   return Padding(
-                    padding: const EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 2.0),
-                     child: InkWell(
-                       splashColor: Colors.blue.withAlpha(30),
-                       onTap: () {
-                         projectDetailsScreenViewModel.navigateToEditItemScreen(context, itemList[index], project);
-                         print('Item tapped.');
-                       },
-                       child: Column(
-                         mainAxisSize: MainAxisSize.max,
-                         children: <Widget>[
-                           ListTile(
-                             title: Text(itemList[index].title),
-                             leading: Text(itemList[index].workHoursInADay.toString()),
-                           ),
-                         ],
-                       )
-                     ),
-                  );
+                      padding: const EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 2.0),
+                       child: InkWell(
+                         splashColor: Colors.blue.withAlpha(30),
+                         onTap: () {
+                           projectDetailsScreenViewModel.navigateToEditItemScreen(context, itemList[index], project);
+                           print('Item tapped.');
+                         },
+                         onLongPress: () {
+                           _deleteItem(itemList[index]);
+                           populateItemList();
+                         },
+                         child: Column(
+                           mainAxisSize: MainAxisSize.max,
+                           children: <Widget>[
+                             ListTile(
+                               title: Text(itemList[index].title),
+                               leading: Text(itemList[index].workHoursInADay.toString()),
+                             ),
+                           ],
+                         )
+                       ),
+                    );
                 }),
+              ),
+
+              // Bottom section
+              Container(
+                color: Colors.blue,
+                width: double.infinity,
+                //height: 200.0,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20.0, 16.0, 8.0, 16.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget> [
+
+                      //Project details Texts
+                      Expanded(
+                        child: Wrap(
+                          direction: Axis.vertical,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
+                              child: Text("Total cost: ${totalProjectCost.toStringAsFixed(2)} $projectCurrencyString"),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
+                              child: Text("Total hourly cost: ${totalProjectHourlyCost.toStringAsFixed(2)} $projectCurrencyString/h"),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 16.0),
+                              child: Text("Total duration: ${totalProjectDuration.toString()} days"),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      //FAB
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 0.0, 8.0, 0.0),
+                        child: Container(
+                          child: FloatingActionButton(
+                            backgroundColor: Colors.amberAccent,
+                            foregroundColor: Colors.green[800],
+                            tooltip: 'Add Item',
+                            child: Icon(Icons.add),
+                            onPressed: () {
+                              projectDetailsScreenViewModel.navigateToAddItemScreen(context, project);
+                            },
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
               ),
 
             ],
         ),
       ),
 
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.amberAccent,
-        foregroundColor: Colors.green[800],
-        tooltip: 'Add Item',
-        child: Icon(Icons.add),
-        onPressed: () {
-          projectDetailsScreenViewModel.navigateToAddItemScreen(context, project);
-        },
-      ),
     );
   }
 
@@ -130,7 +191,14 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
    * Custom method for populating itemList variable from database.
    */
   void populateItemList() {
+    itemList.clear();
     projectDetailsScreenViewModel.getItemWithProjectId(projectId).then((value) {
+
+      totalProjectCost = 0.0;
+      totalProjectDuration = 0;
+      double totalProjectHours = 0.0;
+      totalProjectHourlyCost = 0.0;
+
       setState(() {
         value.forEach((element) {
           itemList.add(Item(
@@ -140,7 +208,37 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
               cost: element.cost,
               hourlyCost: element.hourlyCost,
               workHoursInADay: element.workHoursInADay));
+
+          // calculate total cost, duration, hours for the project
+          totalProjectCost = totalProjectCost + element.cost;
+          totalProjectDuration = totalProjectDuration + element.durationInDay;
+          totalProjectHours = totalProjectHours + (element.hourlyCost * element.durationInDay);
         });
+
+        // calculate total hourly cost for the project via total cost and total hours
+        totalProjectHourlyCost = totalProjectCost / totalProjectHours;
+
+        //Update Project values with edited or newly added items.
+        // if item list is empty then make inital values equal to zero
+        if (itemList.isEmpty) {
+          var newProject = Project(id: project.id,
+              title: project.title,
+              cost: 0.0,
+              durationInDay: 0,
+              hourlyCost: 0.0);
+
+          projectDetailsScreenViewModel.updateProject(newProject);
+
+        } else {
+          var newProject = Project(id: project.id,
+              title: project.title,
+              cost: totalProjectCost,
+              durationInDay: totalProjectDuration,
+              hourlyCost: totalProjectHourlyCost);
+
+          projectDetailsScreenViewModel.updateProject(newProject);
+        }
+
       });
     }).catchError((error) {
       print(error);
@@ -157,5 +255,12 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
     await projectDetailsScreenViewModel.insertItem(sampleItem);
 
     itemList.add(sampleItem);
+  }
+
+  /**
+   * Custom method for deleting an item from the list
+   */
+  void _deleteItem(Item item) async {
+    await projectDetailsScreenViewModel.deleteItem(item);
   }
 }
