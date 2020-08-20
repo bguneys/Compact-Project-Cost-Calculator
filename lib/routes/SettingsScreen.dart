@@ -1,20 +1,101 @@
 import 'package:flutter/material.dart';
 
+import 'AboutScreen.dart';
+import 'DisclaimerScreen.dart';
+
 class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[800],
 
       appBar: AppBar(
         title: Text("SETTINGS"),
+        backgroundColor: Colors.green[800],
+        elevation: 0.0,
         centerTitle: true,
       ),
 
-      body: Center(
+      body: Container(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Settings Screen", style: Theme.of(context).textTheme.headline4),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 16.0, 0.0, 0.0),
+                    child: InkWell(
+                        splashColor: Colors.blue.withAlpha(30),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => DisclaimerScreen()),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text("Disclaimer"),
+                        ),
+                      ),
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: <Widget>[
+                Expanded(
+                    child: InkWell(
+                      splashColor: Colors.blue.withAlpha(30),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AboutScreen()),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text("About"),
+                      ),
+                    ),
+                ),
+              ],
+            ),
+/*
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () {
+                      print('Item tapped.');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text("Share the app"),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () {
+                      print('Item tapped.');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text("Rate the app"),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+ */
           ],
         ),
       ) ,

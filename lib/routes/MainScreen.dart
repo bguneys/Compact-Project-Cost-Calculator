@@ -32,11 +32,15 @@ class _MainScreenState extends State<MainScreen> {
   //TextController for controlling text entered in TextFormField for project title
   TextEditingController textController = new TextEditingController();
 
+  Project longTappedProject; //long tapped Project to be deleted
+
+  FocusNode _focusNode = new FocusNode(); // used to hide soft keyboard
+
   @override
   void initState() {
     super.initState();
 
-    populateProjectList();  //Custom method for populating projectList variable from database.
+    populateProjectList();  //Project to be used in _showDialog() method
   }
 
   @override
@@ -96,8 +100,8 @@ class _MainScreenState extends State<MainScreen> {
                           print('Card tapped.');
                         },
                         onLongPress: () {
-                          _deleteProject(projectList[index]);
-                          populateProjectList();
+                          longTappedProject = projectList[index];  //Project to be used in _showDialog() method
+                          _showDialog(); // custom method for showing AlertDialog
                         },
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -138,6 +142,7 @@ class _MainScreenState extends State<MainScreen> {
                             contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                           ),
                           controller: textController,
+                          focusNode: _focusNode, // used to hide soft keyboard
                         )),
 
                     // FAB
@@ -217,6 +222,11 @@ class _MainScreenState extends State<MainScreen> {
         // insert a project into the database.
         await mainScreenViewModel.insertProject(sampleProject);
         populateProjectList();
+
+        // make TextFormField empty after adding Project
+        textController.text = "";
+
+        _focusNode.unfocus(); // used to hide soft keyboard
       }
 
     } else {
@@ -240,5 +250,37 @@ class _MainScreenState extends State<MainScreen> {
   void _deleteProject(Project project) async {
     await mainScreenViewModel.deleteProject(project);
   }
+
+  /**
+   * Custom method for showing AlertDialog
+   */
+  Future<void> _showDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button to close dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Project?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                _deleteProject(longTappedProject);
+                populateProjectList();
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
 }

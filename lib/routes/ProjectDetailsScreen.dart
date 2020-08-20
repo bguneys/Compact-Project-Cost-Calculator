@@ -38,6 +38,10 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   //Item list variable to store Items from database
   List<Item> itemList = new List();
 
+  Item longTappedItem; // Item to be used in _showDialog() method
+
+  FocusNode _focusNode = new FocusNode(); // used to hide soft keyboard
+
   int projectId;
 
   double totalProjectCost;
@@ -98,11 +102,11 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                          splashColor: Colors.blue.withAlpha(30),
                          onTap: () {
                            projectDetailsScreenViewModel.navigateToEditItemScreen(context, itemList[index], project);
-                           print('Item tapped.');
+                           //print('Item tapped.');
                          },
                          onLongPress: () {
-                           _deleteItem(itemList[index]);
-                           populateItemList();
+                           _showDialog(); // custom method for showing AlertDialog
+                           longTappedItem = itemList[index]; // Item to be used in _showDialog() method
                          },
                          child: Column(
                            mainAxisSize: MainAxisSize.max,
@@ -262,5 +266,36 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
    */
   void _deleteItem(Item item) async {
     await projectDetailsScreenViewModel.deleteItem(item);
+  }
+
+  /**
+   * Custom method for showing AlertDialog
+   */
+  Future<void> _showDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button to close dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Item?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                _deleteItem(longTappedItem);
+                populateItemList();
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
