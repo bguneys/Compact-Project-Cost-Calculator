@@ -55,6 +55,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
         backgroundColor: Colors.green[800],
         elevation: 0.0,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            addItemScreenViewModel.navigateToProjectDetailsScreen(context, project);
+          },
+        ),
         actions: <Widget>[
           PopupMenuButton<String>(
             onSelected: _handleAppBarClick,

@@ -57,7 +57,7 @@ class ProjectDetailsScreenViewModel {
    * Custom method for navigating to EditItemScreen with chosen project data
    */
   void navigateToEditItemScreen(BuildContext context, Item item, Project project) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => EditItemScreen(item: item, project: project)),
     );
@@ -67,7 +67,7 @@ class ProjectDetailsScreenViewModel {
    * Custom method for navigating to AddItemScreen with chosen project data
    */
   void navigateToAddItemScreen(BuildContext context, project) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => AddItemScreen(project: project,)),
     );
