@@ -11,6 +11,8 @@ class Constants {
   static final columnProjectDurationInDay = 'durationInDay';
   static final columnProjectCost = 'cost';
   static final columnProjectHourlyCost = 'hourlyCost';
+  static final columnProjectNote = 'note';
+  static final columnProjectCurrency = 'currency';
 
   static final databaseItemTable = 'item_table';
   static final columnItemId = 'item_id';

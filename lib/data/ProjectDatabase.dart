@@ -27,7 +27,7 @@ class ProjectDatabase {
         onCreate: (db, version) {
           // creating projects table
           db.execute(
-            "CREATE TABLE ${Constants.databaseProjectTable} (${Constants.columnProjectId} INTEGER PRIMARY KEY AUTOINCREMENT, ${Constants.columnProjectTitle} TEXT, ${Constants.columnProjectDurationInDay} INTEGER, ${Constants.columnProjectCost} REAL, ${Constants.columnProjectHourlyCost} REAL)"
+            "CREATE TABLE ${Constants.databaseProjectTable} (${Constants.columnProjectId} INTEGER PRIMARY KEY AUTOINCREMENT, ${Constants.columnProjectTitle} TEXT, ${Constants.columnProjectDurationInDay} INTEGER, ${Constants.columnProjectCost} REAL, ${Constants.columnProjectHourlyCost} REAL, ${Constants.columnProjectNote} TEXT, ${Constants.columnProjectCurrency} TEXT)"
           );
 
           // creating items table with foreign key
@@ -74,6 +74,8 @@ class ProjectDatabase {
         durationInDay: maps[i][Constants.columnProjectDurationInDay],
         cost: maps[i][Constants.columnProjectCost],
         hourlyCost: maps[i][Constants.columnProjectHourlyCost],
+        note: maps[i][Constants.columnProjectNote],
+        currency: maps[i][Constants.columnProjectCurrency],
       );
     });
   }

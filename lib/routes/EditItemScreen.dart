@@ -50,7 +50,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
     workHoursADayTextFieldController.text = item.workHoursInADay.toString();
     _totalCostString = item.cost.toString();
 
-    print("Item prop: title: " + item.title + " - hourlyCost: " + item.hourlyCost.toString() + " - workHours: " + item.workHoursInADay.toString());
+    //print("Item prop: title: " + item.title + " - hourlyCost: " + item.hourlyCost.toString() + " - workHours: " + item.workHoursInADay.toString());
   }
 
   @override
@@ -178,7 +178,10 @@ class _EditItemScreenState extends State<EditItemScreen> {
                             validator: (value) {
                               if (value.isEmpty) {
                                 return "Please enter some value";
+                              }else if (double.parse(value) > 24) {
+                                return "Working hours a day can't be above 24";
                               }
+
                               return null;
                             },
                             decoration: InputDecoration(

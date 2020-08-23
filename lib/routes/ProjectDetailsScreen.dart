@@ -47,7 +47,6 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   double totalProjectCost;
   int totalProjectDuration;
   double totalProjectHourlyCost;
-  String projectCurrencyString = "\$";
 
   @override
   void initState() {
@@ -68,7 +67,20 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
         backgroundColor: Colors.green[800],
         elevation: 0.0,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              projectDetailsScreenViewModel.navigateToEditProjectScreen(context, project);
+            },
+          ),
+
           PopupMenuButton<String>(
             onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
@@ -140,12 +152,12 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
-                              child: Text("Total cost: ${totalProjectCost.toStringAsFixed(2)} $projectCurrencyString"),
+                              child: Text("Total cost: ${totalProjectCost.toStringAsFixed(2)} ${project.currency}"),
                             ),
 
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-                              child: Text("Total hourly cost: ${totalProjectHourlyCost.toStringAsFixed(2)} $projectCurrencyString/h"),
+                              child: Text("Total hourly cost: ${totalProjectHourlyCost.toStringAsFixed(2)} ${project.currency}/h"),
                             ),
 
                             Padding(
@@ -229,7 +241,9 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
               title: project.title,
               cost: 0.0,
               durationInDay: 0,
-              hourlyCost: 0.0);
+              hourlyCost: 0.0,
+              note: project.note,
+              currency: project.currency);
 
           projectDetailsScreenViewModel.updateProject(newProject);
 
@@ -238,7 +252,9 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
               title: project.title,
               cost: totalProjectCost,
               durationInDay: totalProjectDuration,
-              hourlyCost: totalProjectHourlyCost);
+              hourlyCost: totalProjectHourlyCost,
+              note: project.note,
+              currency: project.currency);
 
           projectDetailsScreenViewModel.updateProject(newProject);
         }

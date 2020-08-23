@@ -9,13 +9,17 @@ class Project {
   final int durationInDay;
   final double cost;
   final double hourlyCost;
+  final String note;
+  final String currency;
 
   const Project({
       this.id,
       this.title,
       this.durationInDay,
       this.cost,
-      this.hourlyCost});
+      this.hourlyCost,
+      this.note,
+      this.currency});
 
   Map<String, dynamic> toMap() {
     return {
@@ -24,6 +28,8 @@ class Project {
       Constants.columnProjectDurationInDay : durationInDay,
       Constants.columnProjectCost : cost,
       Constants.columnProjectHourlyCost : hourlyCost,
+      Constants.columnProjectNote : note,
+      Constants.columnProjectCurrency : currency,
     };
   }
 

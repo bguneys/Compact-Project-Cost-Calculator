@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
 
-    populateProjectList();  //Project to be used in _showDialog() method
+    populateProjectList(); // custom method for populating project list
   }
 
   @override
@@ -182,7 +182,9 @@ class _MainScreenState extends State<MainScreen> {
               title: element.title,
               durationInDay: element.durationInDay,
               cost: element.cost,
-              hourlyCost: element.hourlyCost));
+              hourlyCost: element.hourlyCost,
+              note: element.note,
+              currency: element.currency));
         });
       });
 
@@ -205,7 +207,8 @@ class _MainScreenState extends State<MainScreen> {
     // check if TextFormField is empty. If yes then give a warning message.
     if (!projectTitle.isEmpty && !projectTitle.trim().isEmpty ) {
 
-      var sampleProject = Project(title: projectTitle);
+      // create a new Project with title and initial note and currency values
+      var sampleProject = Project(title: projectTitle, note: "", currency: "USD");
 
       // if a Project with same name exists in database then give a warning message
       // await keyword is used here to make flow to wait for this block execution

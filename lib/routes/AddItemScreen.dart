@@ -171,7 +171,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return "Please enter some value";
+                                  } else if (double.parse(value) > 24) {
+                                    return "Working hours a day can't be above 24";
                                   }
+
                                   return null;
                                 },
                                 decoration: InputDecoration(
@@ -216,7 +219,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                   workHoursInADay: workHoursInADay,
                                   projectId: projectId);
 
-                                 await addItemScreenViewModel.insertItem(item);
+                              await addItemScreenViewModel.insertItem(item);
 
                               // go to ProjectDetailsScreen after inserting Item into database
                               addItemScreenViewModel.navigateToProjectDetailsScreen(context, project);
