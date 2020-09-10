@@ -31,6 +31,11 @@ class ProjectDetailsScreenViewModel {
     return itemRepository.getItemsWithProjectId(itemProjectId);
   }
 
+  /// Custom method for getting Project with certain id from database
+  Future<List<Project>> getProjectWithId(int selectedProjectId) async {
+    return projectRepository.getIProjectWithId(selectedProjectId);
+  }
+
   /// Custom method for updating an Item inside database
   Future<void> updateItem(Item item) async {
     itemRepository.updateItem(item);
@@ -78,7 +83,7 @@ class ProjectDetailsScreenViewModel {
   /**
    * Custom method for navigating to EditProjectScreen with chosen project data
    */
-  void navigateToEditProjectScreen(BuildContext context, project) {
+  void navigateToEditProjectScreen(BuildContext context, Project project) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => EditProjectScreen(project: project)),

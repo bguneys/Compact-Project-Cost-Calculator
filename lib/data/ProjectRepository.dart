@@ -35,6 +35,11 @@ class ProjectRepository {
     return _projectDatabase.getProjects();
   }
 
+  /// Custom method for getting Project with a certain id from database
+  Future<List<Project>> getIProjectWithId(int selectedProjectId) async {
+    return _projectDatabase.getProjectWithId(selectedProjectId);
+  }
+
   /// Custom method for updating a Project inside Database table
   Future<void> updateProject(Project project) async {
     _projectDatabase.updateProject(project);

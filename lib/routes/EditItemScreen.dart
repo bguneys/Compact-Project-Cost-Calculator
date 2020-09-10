@@ -65,7 +65,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            editItemScreenViewModel.navigateToProjectDetailsScreen(context, project);
+            editItemScreenViewModel.navigateToProjectDetailsScreen(context, project.id, project.title);
           },
         ),
         actions: <Widget>[
@@ -131,7 +131,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                               return null;
                             },
                             decoration: InputDecoration(
-                                labelText: "Hourly Cost : "
+                                labelText: "Hourly Cost (${project.currency}) : "
                             ),
                           ),
                         ),
@@ -230,7 +230,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                               await editItemScreenViewModel.updateItem(editedItem);
 
                               // go to ProjectDetailsScreen after inserting Item into database
-                              editItemScreenViewModel.navigateToProjectDetailsScreen(context, project);
+                              editItemScreenViewModel.navigateToProjectDetailsScreen(context, project.id, project.title);
 
                               //print("title: " + titleString + " - hourlyCost: " + hourlyCost.toString() + " - days: " + days.toString() + " - total cost " + totalCost.toString() + " - projectId: " + project.id.toString());
                             }

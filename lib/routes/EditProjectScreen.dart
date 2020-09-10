@@ -57,7 +57,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            editProjectScreenViewModel.navigateToProjectDetailsScreen(context, project);
+            editProjectScreenViewModel.navigateToProjectDetailsScreen(context, project.id, project.title);
           },
         ),
         actions: <Widget>[
@@ -142,7 +142,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                               await editProjectScreenViewModel.updateProject(editedProject);
 
                               // go to ProjectDetailsScreen after inserting Item into database
-                              editProjectScreenViewModel.navigateToProjectDetailsScreen(context, editedProject);
+                              editProjectScreenViewModel.navigateToProjectDetailsScreen(context, editedProject.id, editedProject.title);
                             }
                           }
                       ),

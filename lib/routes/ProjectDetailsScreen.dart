@@ -8,22 +8,24 @@ import 'package:bgsapp02082020/routes/ProjectDetailsScreenViewModel.dart';
 import 'package:flutter/material.dart';
 
 class ProjectDetailsScreen extends StatefulWidget {
-  final Project project;
+  final int projectId;
+  final String projectTitle;
 
   // In the constructor, we create an object with Project obtained from MainScreen
-  ProjectDetailsScreen({Key key, @required this.project}) : super(key: key);
+  ProjectDetailsScreen({Key key, @required this.projectId, @required this.projectTitle}) : super(key: key);
 
   @override
   // In createState() callback we create state class with project argument
   _ProjectDetailsScreenState createState() =>
-      _ProjectDetailsScreenState(project: project);
+      _ProjectDetailsScreenState(projectId: projectId, projectTitle: projectTitle);
 }
 
 class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
-  final Project project;
+  final int projectId;
+  final String projectTitle;
 
   // In constructor we create an object with Project obtained from ProjectDetailsScreen
-  _ProjectDetailsScreenState({@required this.project});
+  _ProjectDetailsScreenState({@required this.projectId, @required this.projectTitle});
 
   // create ProjectDatabase through creating ItemRepository instance
   static final itemRepository = ItemRepository.getInstance();
@@ -42,7 +44,9 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
 
   FocusNode _focusNode = new FocusNode(); // used to hide soft keyboard
 
-  int projectId;
+  Project selectedProject;
+
+  String projectCurrency;
 
   double totalProjectCost;
   int totalProjectDuration;
@@ -52,9 +56,8 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   void initState() {
     super.initState();
 
-    projectId = project.id;
-
     populateItemList(); // Custom method for populating itemList variable from database.
+    getProject(); // fetch Project chosen with project id and updated values.
   }
 
   @override
@@ -63,7 +66,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
       backgroundColor: Colors.green[800],
 
       appBar: AppBar(
-        title: Text(project.title),
+        title: Text(projectTitle),
         backgroundColor: Colors.green[800],
         elevation: 0.0,
         centerTitle: true,
@@ -77,7 +80,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              projectDetailsScreenViewModel.navigateToEditProjectScreen(context, project);
+              projectDetailsScreenViewModel.navigateToEditProjectScreen(context, selectedProject);
             },
           ),
 
@@ -113,7 +116,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                        child: InkWell(
                          splashColor: Colors.blue.withAlpha(30),
                          onTap: () {
-                           projectDetailsScreenViewModel.navigateToEditItemScreen(context, itemList[index], project);
+                           projectDetailsScreenViewModel.navigateToEditItemScreen(context, itemList[index], selectedProject);
                            //print('Item tapped.');
                          },
                          onLongPress: () {
@@ -152,12 +155,12 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
-                              child: Text("Total cost: ${totalProjectCost.toStringAsFixed(2)} ${project.currency}"),
+                              child: Text("Total cost: ${totalProjectCost.toStringAsFixed(2)} $projectCurrency"),
                             ),
 
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-                              child: Text("Total hourly cost: ${totalProjectHourlyCost.toStringAsFixed(2)} ${project.currency}/h"),
+                              child: Text("Total hourly cost: ${totalProjectHourlyCost.toStringAsFixed(2)} $projectCurrency/h"),
                             ),
 
                             Padding(
@@ -178,7 +181,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                             tooltip: 'Add Item',
                             child: Icon(Icons.add),
                             onPressed: () {
-                              projectDetailsScreenViewModel.navigateToAddItemScreen(context, project);
+                              projectDetailsScreenViewModel.navigateToAddItemScreen(context, selectedProject);
                             },
                           ),
                         ),
@@ -206,9 +209,10 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   /**
    * Custom method for populating itemList variable from database.
    */
-  void populateItemList() {
+  void populateItemList() async {
     itemList.clear();
-    projectDetailsScreenViewModel.getItemWithProjectId(projectId).then((value) {
+
+    await projectDetailsScreenViewModel.getItemWithProjectId(projectId).then((value) {
 
       totalProjectCost = 0.0;
       totalProjectDuration = 0;
@@ -234,32 +238,33 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
         // calculate total hourly cost for the project via total cost and total hours
         totalProjectHourlyCost = totalProjectCost / totalProjectHours;
 
-        //Update Project values with edited or newly added items.
-        // if item list is empty then make inital values equal to zero
-        if (itemList.isEmpty) {
-          var newProject = Project(id: project.id,
-              title: project.title,
-              cost: 0.0,
-              durationInDay: 0,
-              hourlyCost: 0.0,
-              note: project.note,
-              currency: project.currency);
-
-          projectDetailsScreenViewModel.updateProject(newProject);
-
-        } else {
-          var newProject = Project(id: project.id,
-              title: project.title,
-              cost: totalProjectCost,
-              durationInDay: totalProjectDuration,
-              hourlyCost: totalProjectHourlyCost,
-              note: project.note,
-              currency: project.currency);
-
-          projectDetailsScreenViewModel.updateProject(newProject);
-        }
-
       });
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
+  /**
+   * Custom method for fetching Project chosen with project id and updated values
+   * for edited/ newly added items. If
+   */
+  void getProject() async {
+    await projectDetailsScreenViewModel.getProjectWithId(projectId).then((projectList) {
+      selectedProject = Project(
+          id: projectList.first.id,
+          title: projectList.first.title,
+          cost: totalProjectCost,
+          durationInDay: totalProjectDuration,
+          hourlyCost: totalProjectHourlyCost,
+          note: projectList.first.note,
+          currency: projectList.first.currency);
+
+      projectDetailsScreenViewModel.updateProject(selectedProject);
+
+      setState(() {
+        projectCurrency = projectList.first.currency;
+      });
+
     }).catchError((error) {
       print(error);
     });

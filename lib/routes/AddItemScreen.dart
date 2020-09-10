@@ -58,7 +58,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            addItemScreenViewModel.navigateToProjectDetailsScreen(context, project);
+            addItemScreenViewModel.navigateToProjectDetailsScreen(context, project.id, project.title);
           },
         ),
         actions: <Widget>[
@@ -124,7 +124,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                       return null;
                                     },
                                     decoration: InputDecoration(
-                                        labelText: "Hourly Cost : "
+                                        labelText: "Hourly Cost (${project.currency}) : "
                                     ),
                                   ),
                             ),
@@ -222,7 +222,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                               await addItemScreenViewModel.insertItem(item);
 
                               // go to ProjectDetailsScreen after inserting Item into database
-                              addItemScreenViewModel.navigateToProjectDetailsScreen(context, project);
+                              addItemScreenViewModel.navigateToProjectDetailsScreen(context, project.id, project.title);
 
                               //print("title: " + titleString + " - hourlyCost: " + hourlyCost.toString() + " - days: " + days.toString() + " - total cost " + totalCost.toString() + " - projectId: " + project.id.toString());
                             }

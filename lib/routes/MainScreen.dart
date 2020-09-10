@@ -96,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
                       child: InkWell(
                         splashColor: Colors.blue.withAlpha(30),
                         onTap: () {
-                          mainScreenViewModel.navigateToProjectDetailsScreen(context, projectList[index]);
+                          mainScreenViewModel.navigateToProjectDetailsScreen(context, projectList[index].id, projectList[index].title);
                           print('Card tapped.');
                         },
                         onLongPress: () {
@@ -208,7 +208,12 @@ class _MainScreenState extends State<MainScreen> {
     if (!projectTitle.isEmpty && !projectTitle.trim().isEmpty ) {
 
       // create a new Project with title and initial note and currency values
-      var sampleProject = Project(title: projectTitle, note: "", currency: "USD");
+      var sampleProject = Project(title: projectTitle,
+                                  cost: 0.0,
+                                  durationInDay: 0,
+                                  hourlyCost: 0.0,
+                                  note: "",
+                                  currency: "USD");
 
       // if a Project with same name exists in database then give a warning message
       // await keyword is used here to make flow to wait for this block execution

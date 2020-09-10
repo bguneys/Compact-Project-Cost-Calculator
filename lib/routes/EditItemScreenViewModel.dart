@@ -38,10 +38,10 @@ class EditItemScreenViewModel {
   /**
    * Custom method for navigating to ProjectDetailsScreen
    */
-  void navigateToProjectDetailsScreen(BuildContext context, project) {
+  void navigateToProjectDetailsScreen(BuildContext context, int projectId, String projectTitle) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => ProjectDetailsScreen(project: project)),
+      MaterialPageRoute(builder: (context) => ProjectDetailsScreen(projectId: projectId, projectTitle: projectTitle)),
     );
   }
 

@@ -80,6 +80,27 @@ class ProjectDatabase {
     });
   }
 
+  /// Custom method for getting all Items assigned to a Project from database
+  Future<List<Item>> getItemsWithProjectId(int itemProjectId) async {
+
+    final Database db = await projectDatabase.databaseInstance;
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM ${Constants.databaseItemTable} WHERE ${Constants.columnItemProjectId} = ?', [itemProjectId]);
+
+    // Convert the List<Map<String, dynamic> into a List<Item.
+    return List.generate(maps.length, (i) {
+      return Item(
+        id: maps[i][Constants.columnItemId],
+        title: maps[i][Constants.columnItemTitle],
+        durationInDay: maps[i][Constants.columnItemDurationInDay],
+        cost: maps[i][Constants.columnItemCost],
+        hourlyCost: maps[i][Constants.columnItemHourlyCost],
+        workHoursInADay: maps[i][Constants.columnItemWorkHoursInADay],
+        projectId: maps[i][Constants.columnItemProjectId],
+      );
+    });
+  }
+
   /// Custom method for updating a Project inside Database table
   Future<void> updateProject(Project project) async {
     final db = await projectDatabase.databaseInstance;
@@ -125,23 +146,25 @@ class ProjectDatabase {
     );
   }
 
-  /// Custom method for getting all Items assigned to a Project from database
-  Future<List<Item>> getItemsWithProjectId(int itemProjectId) async {
+  /// Custom method for getting project with a certain id from database
+  Future<List<Project>> getProjectWithId(int selectedProjectId) async {
 
     final Database db = await projectDatabase.databaseInstance;
 
-    final List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM ${Constants.databaseItemTable} WHERE ${Constants.columnItemProjectId} = ?', [itemProjectId]);
+    final List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM ${Constants.databaseProjectTable} WHERE ${Constants.columnProjectId} = ?', [selectedProjectId]);
+
+    //final Project selectedProject = maps[0][0];
 
     // Convert the List<Map<String, dynamic> into a List<Item.
     return List.generate(maps.length, (i) {
-      return Item(
-        id: maps[i][Constants.columnItemId],
-        title: maps[i][Constants.columnItemTitle],
-        durationInDay: maps[i][Constants.columnItemDurationInDay],
-        cost: maps[i][Constants.columnItemCost],
-        hourlyCost: maps[i][Constants.columnItemHourlyCost],
-        workHoursInADay: maps[i][Constants.columnItemWorkHoursInADay],
-        projectId: maps[i][Constants.columnItemProjectId],
+      return Project(
+        id: maps[i][Constants.columnProjectId],
+        title: maps[i][Constants.columnProjectTitle],
+        durationInDay: maps[i][Constants.columnProjectDurationInDay],
+        cost: maps[i][Constants.columnProjectCost],
+        hourlyCost: maps[i][Constants.columnProjectHourlyCost],
+        note: maps[i][Constants.columnProjectNote],
+        currency: maps[i][Constants.columnProjectCurrency],
       );
     });
   }
