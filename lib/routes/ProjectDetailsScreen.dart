@@ -128,7 +128,12 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                            children: <Widget>[
                              ListTile(
                                title: Text(itemList[index].title),
-                               leading: Text(itemList[index].workHoursInADay.toString()),
+                               trailing: Text("Duration: ${itemList[index].durationInDay.toString()}\n"
+                                   "Hourly Cost: ${itemList[index].hourlyCost.toString()}\n"
+                                   "Total Cost: ${itemList[index].cost.toString()}"),
+                             ),
+                             Divider(
+                               color: Colors.white,
                              ),
                            ],
                          )
