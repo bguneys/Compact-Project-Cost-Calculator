@@ -7,11 +7,11 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[800],
+      backgroundColor: Theme.of(context).backgroundColor,
 
       appBar: AppBar(
-        title: Text("SETTINGS"),
-        backgroundColor: Colors.green[800],
+        title: Text("SETTINGS", style: Theme.of(context).textTheme.headline6),
+        backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,
       ),
@@ -34,7 +34,7 @@ class SettingsScreen extends StatelessWidget {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Text("Disclaimer"),
+                          child: Text("Disclaimer", style: Theme.of(context).textTheme.subtitle2),
                         ),
                       ),
                   ),
@@ -55,7 +55,7 @@ class SettingsScreen extends StatelessWidget {
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text("About"),
+                        child: Text("About", style: Theme.of(context).textTheme.subtitle2),
                       ),
                     ),
                 ),

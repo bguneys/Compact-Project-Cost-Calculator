@@ -63,11 +63,11 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[800],
+      backgroundColor: Theme.of(context).backgroundColor,
 
       appBar: AppBar(
-        title: Text(projectTitle),
-        backgroundColor: Colors.green[800],
+        title: Text(projectTitle, style: Theme.of(context).textTheme.headline6),
+        backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,
         leading: IconButton(
@@ -100,51 +100,62 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
       ),
 
       body: Container(
+        color: Theme.of(context).backgroundColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
 
               //ListView
               Expanded(
-                child: ListView.builder(itemBuilder: (context, index) {
-                  if (index == itemList.length) {
-                    return null;
-                  }
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 0.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(16)
+                    ),
+                    child: ListView.builder(itemBuilder: (context, index) {
+                      if (index == itemList.length) {
+                        return null;
+                      }
 
-                  return Padding(
-                      padding: const EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 2.0),
-                       child: InkWell(
-                         splashColor: Colors.blue.withAlpha(30),
-                         onTap: () {
-                           projectDetailsScreenViewModel.navigateToEditItemScreen(context, itemList[index], selectedProject);
-                           //print('Item tapped.');
-                         },
-                         onLongPress: () {
-                           _showDialog(); // custom method for showing AlertDialog
-                           longTappedItem = itemList[index]; // Item to be used in _showDialog() method
-                         },
-                         child: Column(
-                           mainAxisSize: MainAxisSize.max,
-                           children: <Widget>[
-                             ListTile(
-                               title: Text(itemList[index].title),
-                               trailing: Text("Duration: ${itemList[index].durationInDay.toString()}\n"
-                                   "Hourly Cost: ${itemList[index].hourlyCost.toString()}\n"
-                                   "Total Cost: ${itemList[index].cost.toString()}"),
-                             ),
-                             Divider(
-                               color: Colors.white,
-                             ),
-                           ],
-                         )
-                       ),
-                    );
-                }),
+                      return Padding(
+                          padding: const EdgeInsets.fromLTRB(10.0, 4.0, 10.0, 2.0),
+                           child: InkWell(
+                             splashColor: Colors.blue.withAlpha(30),
+                             onTap: () {
+                               projectDetailsScreenViewModel.navigateToEditItemScreen(context, itemList[index], selectedProject);
+                               //print('Item tapped.');
+                             },
+                             onLongPress: () {
+                               _showDialog(); // custom method for showing AlertDialog
+                               longTappedItem = itemList[index]; // Item to be used in _showDialog() method
+                             },
+                             child: Column(
+                               mainAxisSize: MainAxisSize.max,
+                               children: <Widget>[
+                                 ListTile(
+                                   title: Text(itemList[index].title, style: Theme.of(context).textTheme.subtitle1),
+                                   trailing: Text("Duration: ${itemList[index].durationInDay.toString()}\n"
+                                       "Hourly Cost: ${itemList[index].hourlyCost.toString()}\n"
+                                       "Total Cost: ${itemList[index].cost.toString()}",
+                                   style: Theme.of(context).textTheme.headline5),
+                                 ),
+                                 Divider(
+                                   color: Theme.of(context).backgroundColor,
+                                 ),
+                               ],
+                             )
+                           ),
+                        );
+                    }),
+                  ),
+                ),
               ),
 
               // Bottom section
               Container(
-                color: Colors.blue,
+                color: Theme.of(context).backgroundColor,
                 width: double.infinity,
                 //height: 200.0,
                 child: Padding(
@@ -160,17 +171,20 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
-                              child: Text("Total cost: ${totalProjectCost.toStringAsFixed(2)} $projectCurrency"),
+                              child: Text("Total cost: ${totalProjectCost.toStringAsFixed(2)} $projectCurrency",
+                                  style: Theme.of(context).textTheme.subtitle2),
                             ),
 
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-                              child: Text("Total hourly cost: ${totalProjectHourlyCost.toStringAsFixed(2)} $projectCurrency/h"),
+                              child: Text("Total hourly cost: ${totalProjectHourlyCost.toStringAsFixed(2)} $projectCurrency/h",
+                                  style: Theme.of(context).textTheme.subtitle2),
                             ),
 
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 16.0),
-                              child: Text("Total duration: ${totalProjectDuration.toString()} days"),
+                              child: Text("Total duration: ${totalProjectDuration.toString()} days",
+                                  style: Theme.of(context).textTheme.subtitle2),
                             ),
                           ],
                         ),
@@ -181,10 +195,10 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                         padding: const EdgeInsets.fromLTRB(16.0, 0.0, 8.0, 0.0),
                         child: Container(
                           child: FloatingActionButton(
-                            backgroundColor: Colors.amberAccent,
-                            foregroundColor: Colors.green[800],
+                            backgroundColor: Color(0xFFFFc640),
+                            foregroundColor: Theme.of(context).backgroundColor,
                             tooltip: 'Add Item',
-                            child: Icon(Icons.add),
+                            child: Icon(Icons.add, size: 32.0),
                             onPressed: () {
                               projectDetailsScreenViewModel.navigateToAddItemScreen(context, selectedProject);
                             },

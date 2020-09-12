@@ -32,12 +32,14 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
 
   //TextEditControllers for each TextFormField
   final projectNoteTextFieldController = TextEditingController();
-  final projectCurrencyTextFieldController = TextEditingController();
+  //final projectCurrencyTextFieldController = TextEditingController();
+
+  String dropdownValue = 'USD'; //DropDownButton initial value
 
   @override
   void initState() {
     projectNoteTextFieldController.text = project.note;
-    projectCurrencyTextFieldController.text = project.currency;
+    //projectCurrencyTextFieldController.text = project.currency;
 
     super.initState();
 
@@ -50,8 +52,8 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
     return Scaffold(
 
       appBar: AppBar(
-        title: Text(project.title),
-        backgroundColor: Colors.green[800],
+        title: Text(project.title, style: Theme.of(context).textTheme.headline6),
+        backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,
         leading: IconButton(
@@ -105,14 +107,31 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                     padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
                     child: Row(
                       children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            controller: projectCurrencyTextFieldController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                labelText: "Currency: "
+                        Text("Project Currency:", style: Theme.of(context).textTheme.subtitle1),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
+                          child: DropdownButton<String>(
+                              value: dropdownValue,
+                              icon: Icon(Icons.arrow_downward),
+                              iconSize: 24,
+                              elevation: 16,
+                              underline: Container(
+                                height: 2,
+                                color: Colors.white,
+                              ),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  dropdownValue = newValue;
+                                });
+                              },
+                              items: <String>['USD', 'EUR', 'GBP', 'TRY']
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value, style: Theme.of(context).textTheme.bodyText1),
+                                );
+                              }).toList(),
                             ),
-                          ),
                         ),
                       ],
                     ),
@@ -128,7 +147,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                             if (_formKey.currentState.validate()) {
                               // calculate total cost from inputs
                               String newProjectNote = projectNoteTextFieldController.text;
-                              String newProjectCurrency = projectCurrencyTextFieldController.text;
+                              String newProjectCurrency = dropdownValue;
 
                               // insert Project to the database
                               var editedProject= Project(id: project.id,
@@ -160,7 +179,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
   @override
   void dispose() {
     projectNoteTextFieldController.dispose();
-    projectCurrencyTextFieldController.dispose();
+    //projectCurrencyTextFieldController.dispose();
 
     super.dispose();
   }

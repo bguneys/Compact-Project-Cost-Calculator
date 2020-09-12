@@ -58,8 +58,8 @@ class _EditItemScreenState extends State<EditItemScreen> {
     return Scaffold(
 
       appBar: AppBar(
-        title: Text(item.title),
-        backgroundColor: Colors.green[800],
+        title: Text(item.title, style: Theme.of(context).textTheme.headline6),
+        backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,
         leading: IconButton(
@@ -85,6 +85,8 @@ class _EditItemScreenState extends State<EditItemScreen> {
       ),
 
       body: Container(
+        height: double.infinity,
+        color: Theme.of(context).backgroundColor,
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -95,21 +97,44 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            controller: titleTextFieldController,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some value";
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                labelText: "Title: "
+                        Text("Title:", style: Theme.of(context).textTheme.headline4),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Theme(
+                                data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                child: TextFormField(
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                  controller: titleTextFieldController,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Please enter some value";
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context).cardColor
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(45)),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context).cardColor
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(45)),
+                                      ),
+                                      hintText: "Type new item title..",
+                                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -117,23 +142,46 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            controller: hourlyCostTextFieldController,
-                            keyboardType: TextInputType.number,
-                            onChanged: _calculateTotalCost,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some value";
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                                labelText: "Hourly Cost (${project.currency}) : "
+                        Text("Hourly Cost (${project.currency}):", style: Theme.of(context).textTheme.headline4),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Theme(
+                                data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                child: TextFormField(
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                  controller: hourlyCostTextFieldController,
+                                  keyboardType: TextInputType.number,
+                                  onChanged: _calculateTotalCost,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Please enter some value";
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context).cardColor
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(45)),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context).cardColor
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(45)),
+                                      ),
+                                      hintText: "Type hourly cost..",
+                                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -141,26 +189,49 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            controller: daysTextFieldController,
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              WhitelistingTextInputFormatter.digitsOnly
-                            ],
-                            onChanged: _calculateTotalCost,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some value";
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: "Duration (days): ",
+                        Text("Duration (days):", style: Theme.of(context).textTheme.headline4),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Theme(
+                                data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                child: TextFormField(
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                  controller: daysTextFieldController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    WhitelistingTextInputFormatter.digitsOnly
+                                  ],
+                                  onChanged: _calculateTotalCost,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Please enter some value";
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context).cardColor
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(45)),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context).cardColor
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(45)),
+                                      ),
+                                      hintText: "Type estimated duration..",
+                                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -168,26 +239,49 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            controller: workHoursADayTextFieldController,
-                            keyboardType: TextInputType.number,
-                            onChanged: _calculateTotalCost,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return "Please enter some value";
-                              }else if (double.parse(value) > 24) {
-                                return "Working hours a day can't be above 24";
-                              }
+                        Text("Working Hours in a Day:", style: Theme.of(context).textTheme.headline4),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Theme(
+                                data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                child: TextFormField(
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                  controller: workHoursADayTextFieldController,
+                                  keyboardType: TextInputType.number,
+                                  onChanged: _calculateTotalCost,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Please enter some value";
+                                    }else if (double.parse(value) > 24) {
+                                      return "Working hours a day can't be above 24";
+                                    }
 
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: "Work Hours in a Day: ",
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context).cardColor
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(45)),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Theme.of(context).cardColor
+                                        ),
+                                        borderRadius: BorderRadius.all(Radius.circular(45)),
+                                      ),
+                                      hintText: "Type working hours a day..",
+                                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -195,14 +289,14 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
-                    child: Text(_totalCostString),
+                    child: Text("Total Cost: ${_totalCostString}"),
                   ),
 
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
                       child: RaisedButton(
-                          child: Text('Save'),
+                          child: Text('SAVE'),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
 

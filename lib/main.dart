@@ -11,8 +11,27 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Cost Time Management App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xFF115969),
+        backgroundColor: Color(0xFF115969),
+        cardColor: Color(0xFFFAFAFA),
+        accentColor: Color(0xFF115969),
         visualDensity: VisualDensity.adaptivePlatformDensity,
+
+        textTheme: TextTheme(
+          headline6: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Color(0xFFFAFAFA)),
+          headline5: TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal, color: Color(0xFF115969), height: 1.5),
+          headline4: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Color(0xFFFAFAFA)),
+          subtitle1: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Color(0xFF115969)),
+          subtitle2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Color(0xFFFAFAFA)),
+          bodyText1: TextStyle(fontSize: 16.0, color: Color(0xFF115969), fontWeight: FontWeight.normal),
+          bodyText2: TextStyle(fontSize: 16.0, color: Color(0xFFFAFAFA), fontWeight: FontWeight.normal),
+
+        ),
+
+        buttonTheme: ButtonThemeData(
+          buttonColor: Color(0xFFFFc640),
+          textTheme: ButtonTextTheme.accent,
+        )
       ),
       home: MainScreen(title: 'PROJECTS'),
     );

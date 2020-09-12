@@ -53,11 +53,11 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.green[800],
+      backgroundColor: Theme.of(context).backgroundColor,
 
       appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Colors.green[800],
+        title: Text(widget.title, style: Theme.of(context).textTheme.headline6),
+        backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,
         actions: <Widget>[
@@ -97,7 +97,6 @@ class _MainScreenState extends State<MainScreen> {
                         splashColor: Colors.blue.withAlpha(30),
                         onTap: () {
                           mainScreenViewModel.navigateToProjectDetailsScreen(context, projectList[index].id, projectList[index].title);
-                          print('Card tapped.');
                         },
                         onLongPress: () {
                           longTappedProject = projectList[index];  //Project to be used in _showDialog() method
@@ -107,8 +106,10 @@ class _MainScreenState extends State<MainScreen> {
                           mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
                             ListTile(
-                              title: Text(projectList[index].title),
-                              leading: Text(projectList[index].id.toString()),
+                              title: Text(projectList[index].title, style: Theme.of(context).textTheme.subtitle1),
+                              trailing: Text("Duration: ${projectList[index].durationInDay.toString()}\n"
+                                  "Cost: ${projectList[index].cost.toString()}",
+                                  style: Theme.of(context).textTheme.headline5),
                             ),
                           ],
                         ),
@@ -128,21 +129,29 @@ class _MainScreenState extends State<MainScreen> {
 
                     // TextFormField
                     Expanded(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.green
+                        child: Theme(
+                          data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                          child: TextFormField(
+                            style: Theme.of(context).textTheme.bodyText2,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).cardColor
+                                ),
+                                borderRadius: BorderRadius.all(Radius.circular(45)),
                               ),
-                              borderRadius: BorderRadius.all(Radius.circular(45)),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).cardColor
+                                ),
+                                borderRadius: BorderRadius.all(Radius.circular(45)),
+                              ),
+                              hintText: "Type new project title..",
+                              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                             ),
-                            hintText: "Type new project title..",
-                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                            controller: textController,
+                            focusNode: _focusNode, // used to hide soft keyboard
                           ),
-                          controller: textController,
-                          focusNode: _focusNode, // used to hide soft keyboard
                         )),
 
                     // FAB
@@ -150,11 +159,12 @@ class _MainScreenState extends State<MainScreen> {
                       padding: const EdgeInsets.fromLTRB(16.0, 0.0, 8.0, 0.0),
                       child: Container(
                         child: FloatingActionButton(
-                          backgroundColor: Colors.amberAccent,
-                          foregroundColor: Colors.green[800],
+                          backgroundColor: Color(0xFFFFc640),
+                          foregroundColor: Theme.of(context).backgroundColor,
                           onPressed: _addProject,
                           tooltip: 'Add Project',
-                          child: Icon(Icons.add),
+                          child: Icon(Icons.add, size: 32.0),
+
                         ),
                       ),
                     ),
