@@ -278,10 +278,10 @@ class _MainScreenState extends State<MainScreen> {
       barrierDismissible: false, // user must tap button to close dialog
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Project?'),
+          title: Text('Delete Project?', style: Theme.of(context).textTheme.bodyText1),
           actions: <Widget>[
             FlatButton(
-              child: Text('Yes'),
+              child: Text('YES', style: Theme.of(context).textTheme.subtitle1),
               onPressed: () {
                 _deleteProject(longTappedProject);
                 populateProjectList();
@@ -289,7 +289,7 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
             FlatButton(
-              child: Text('No'),
+              child: Text('NO', style: Theme.of(context).textTheme.subtitle1),
               onPressed: () {
                 Navigator.of(context).pop();
               },

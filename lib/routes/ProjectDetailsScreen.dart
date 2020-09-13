@@ -317,10 +317,10 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
       barrierDismissible: false, // user must tap button to close dialog
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Item?'),
+          title: Text('Delete Item?', style: Theme.of(context).textTheme.bodyText1),
           actions: <Widget>[
             FlatButton(
-              child: Text('Yes'),
+              child: Text('YES', style: Theme.of(context).textTheme.subtitle1),
               onPressed: () {
                 _deleteItem(longTappedItem);
                 populateItemList();
@@ -328,7 +328,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
               },
             ),
             FlatButton(
-              child: Text('No'),
+              child: Text('NO', style: Theme.of(context).textTheme.subtitle1),
               onPressed: () {
                 Navigator.of(context).pop();
               },

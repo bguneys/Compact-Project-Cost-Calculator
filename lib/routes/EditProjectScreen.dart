@@ -3,6 +3,7 @@ import 'package:bgsapp02082020/data/ItemRepository.dart';
 import 'package:bgsapp02082020/data/Project.dart';
 import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/ProjectDetailsScreen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'EditItemScreenViewModel.dart';
@@ -35,6 +36,8 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
   //final projectCurrencyTextFieldController = TextEditingController();
 
   String dropdownValue = 'USD'; //DropDownButton initial value
+
+  List<String> currencyOptions = <String>['USD', 'EUR', 'GBP', 'TRY'];
 
   @override
   void initState() {
@@ -79,6 +82,8 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
       ),
 
       body: Container(
+        height: double.infinity,
+        color: Theme.of(context).backgroundColor,
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -89,15 +94,40 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Expanded(
-                          child: TextFormField(
-                            controller: projectNoteTextFieldController,
-                            decoration: InputDecoration(
-                                labelText: "Project notes: "
+                        Text("Project Notes:", style: Theme.of(context).textTheme.headline4),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Theme(
+                                data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                child: TextFormField(
+                                  style: Theme.of(context).textTheme.bodyText2,
+                                  controller: projectNoteTextFieldController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
+                                  decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context).cardColor
+                                      ),
+                                      borderRadius: BorderRadius.all(Radius.circular(45)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Theme.of(context).cardColor
+                                      ),
+                                      borderRadius: BorderRadius.all(Radius.circular(45)),
+                                    ),
+                                    hintText: "Type notes..",
+                                    contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -107,31 +137,42 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                     padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
                     child: Row(
                       children: <Widget>[
-                        Text("Project Currency:", style: Theme.of(context).textTheme.subtitle1),
+                        Text("Project Currency:", style: Theme.of(context).textTheme.headline4),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
-                          child: DropdownButton<String>(
-                              value: dropdownValue,
-                              icon: Icon(Icons.arrow_downward),
-                              iconSize: 24,
-                              elevation: 16,
-                              underline: Container(
-                                height: 2,
-                                color: Colors.white,
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 0.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).cardColor,
+                                width: 2,
                               ),
-                              onChanged: (String newValue) {
-                                setState(() {
-                                  dropdownValue = newValue;
-                                });
-                              },
-                              items: <String>['USD', 'EUR', 'GBP', 'TRY']
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value, style: Theme.of(context).textTheme.bodyText1),
-                                );
-                              }).toList(),
+                              borderRadius: BorderRadius.circular(45),
                             ),
+                            child: DropdownButton<String>(
+                                dropdownColor: Theme.of(context).backgroundColor,
+                                value: dropdownValue,
+                                style: TextStyle(color: Theme.of(context).backgroundColor),
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconEnabledColor: Theme.of(context).cardColor,
+                                iconSize: 24,
+                                elevation: 16,
+                                underline: Container(
+                                  height: 0,
+                                ),
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue;
+                                  });
+                                },
+                                items: currencyOptions.map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value, style: Theme.of(context).textTheme.bodyText2),
+                                  );
+                                }).toList(),
+                              ),
+                          ),
                         ),
                       ],
                     ),

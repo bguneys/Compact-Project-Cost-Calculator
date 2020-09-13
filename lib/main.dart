@@ -26,6 +26,7 @@ class MainApp extends StatelessWidget {
           bodyText1: TextStyle(fontSize: 16.0, color: Color(0xFF115969), fontWeight: FontWeight.normal),
           bodyText2: TextStyle(fontSize: 16.0, color: Color(0xFFFAFAFA), fontWeight: FontWeight.normal),
 
+
         ),
 
         buttonTheme: ButtonThemeData(
