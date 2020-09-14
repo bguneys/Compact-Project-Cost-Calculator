@@ -5,6 +5,8 @@ import 'package:bgsapp02082020/routes/ProjectDetailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'EditItemScreenViewModel.dart';
+import 'dart:io';
+import 'package:intl/intl.dart';
 
 class EditItemScreen extends StatefulWidget {
   final Item item;
@@ -38,19 +40,25 @@ class _EditItemScreenState extends State<EditItemScreen> {
   final daysTextFieldController = TextEditingController();
   final workHoursADayTextFieldController = TextEditingController();
 
+  var numberFormat; //2 decimals and thousand separator format for currencies
 
   @override
   void initState() {
     super.initState();
+
+    // find device local and declare NumberFormat using it
+    findSystemLocale().then((locale) {
+      print(locale);
+      numberFormat = NumberFormat.currency(locale: locale, name: "");
+    });
 
     // initilize TextEditController and total cost values with chosen item values
     titleTextFieldController.text = item.title;
     hourlyCostTextFieldController.text = item.hourlyCost.toString();
     daysTextFieldController.text = item.durationInDay.toString();
     workHoursADayTextFieldController.text = item.workHoursInADay.toString();
-    _totalCostString = item.cost.toString();
+    _totalCostString = "${item.cost.toString()}";
 
-    //print("Item prop: title: " + item.title + " - hourlyCost: " + item.hourlyCost.toString() + " - workHours: " + item.workHoursInADay.toString());
   }
 
   @override
@@ -289,7 +297,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
-                    child: Text("Total Cost: ${_totalCostString}"),
+                    child: Text("Total Cost: $_totalCostString ${project.currency}"),
                   ),
 
                   Center(
@@ -374,8 +382,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
       if (hourlyCostString.isEmpty || daysString.isEmpty || workHoursInADayString.isEmpty) {
         //do nothing
-        print("Warning total cost: 0");
-        _totalCostString = "Total Cost: 0.00"; // if not all fields entered then total cost shown zero
+        _totalCostString = "Total Cost: ${numberFormat.format(0).toString()} ${project.currency}"; // if not all fields entered then total cost shown zero
 
       } else {
         double hourlyCost = double.parse(hourlyCostString);
@@ -384,11 +391,23 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
         double totalCost = (hourlyCost * workHoursInADay) * days;
 
-        _totalCostString = "Total Cost: " + totalCost.toStringAsFixed(2); // String with 2 digits after comma
+        _totalCostString = "${numberFormat.format(totalCost).toString()}"; // String with 2 digits after comma
       }
 
     });
 
+  }
+
+  /**
+   * Custom method for determining locale of the device
+   */
+  Future<String> findSystemLocale() {
+    try {
+      Intl.systemLocale = Intl.canonicalizedLocale(Platform.localeName);
+    } catch (e) {
+      return Future.value();
+    }
+    return Future.value(Intl.systemLocale);
   }
 
 }

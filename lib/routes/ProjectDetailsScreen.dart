@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
 import 'package:bgsapp02082020/data/Project.dart';
@@ -52,9 +53,17 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   int totalProjectDuration;
   double totalProjectHourlyCost;
 
+  var numberFormat; //2 decimals and thousand separator format for currencies
+
   @override
   void initState() {
     super.initState();
+
+    // find device local and declare NumberFormat using it
+    findSystemLocale().then((locale) {
+      print(locale);
+      numberFormat = NumberFormat.currency(locale: locale, name: "");
+    });
 
     populateItemList(); // Custom method for populating itemList variable from database.
     getProject(); // fetch Project chosen with project id and updated values.
@@ -136,9 +145,9 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                children: <Widget>[
                                  ListTile(
                                    title: Text(itemList[index].title, style: Theme.of(context).textTheme.subtitle1),
-                                   trailing: Text("Duration: ${itemList[index].durationInDay.toString()}\n"
-                                       "Hourly Cost: ${itemList[index].hourlyCost.toString()}\n"
-                                       "Total Cost: ${itemList[index].cost.toString()}",
+                                   trailing: Text("Duration: ${itemList[index].durationInDay.toString()} days\n"
+                                       "Hourly Cost: ${numberFormat.format(itemList[index].hourlyCost).toString()} $projectCurrency\n"
+                                       "Total Cost: ${numberFormat.format(itemList[index].cost).toString()} $projectCurrency",
                                    style: Theme.of(context).textTheme.headline5),
                                  ),
                                  Divider(
@@ -171,13 +180,13 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
-                              child: Text("Total cost: ${totalProjectCost.toStringAsFixed(2)} $projectCurrency",
+                              child: Text("Total cost: ${numberFormat.format(totalProjectCost).toString()} $projectCurrency",
                                   style: Theme.of(context).textTheme.subtitle2),
                             ),
 
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-                              child: Text("Total hourly cost: ${totalProjectHourlyCost.toStringAsFixed(2)} $projectCurrency/h",
+                              child: Text("Total hourly cost: ${numberFormat.format(totalProjectHourlyCost).toString()} $projectCurrency/h",
                                   style: Theme.of(context).textTheme.subtitle2),
                             ),
 
@@ -290,18 +299,6 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   }
 
   /**
-   * Custom method for database testing
-   */
-  void _addItemsToDatabase() async {
-    var sampleItem = Item(id: 3, title: "Test Item 3", projectId: 1);
-
-    // insert a project into the database.
-    await projectDetailsScreenViewModel.insertItem(sampleItem);
-
-    itemList.add(sampleItem);
-  }
-
-  /**
    * Custom method for deleting an item from the list
    */
   void _deleteItem(Item item) async {
@@ -337,5 +334,17 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
         );
       },
     );
+  }
+
+  /**
+   * Custom method for determining locale of the device
+   */
+  Future<String> findSystemLocale() {
+    try {
+      Intl.systemLocale = Intl.canonicalizedLocale(Platform.localeName);
+    } catch (e) {
+      return Future.value();
+    }
+    return Future.value(Intl.systemLocale);
   }
 }

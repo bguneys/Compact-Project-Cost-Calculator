@@ -46,8 +46,6 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
 
     super.initState();
 
-    // initilize TextEditController and total cost values with chosen item values
-
   }
 
   @override
@@ -231,5 +229,6 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
   void _handleAppBarClick(String value) {
     editProjectScreenViewModel.handleAppBarClick(value, context);
   }
+
 
 }

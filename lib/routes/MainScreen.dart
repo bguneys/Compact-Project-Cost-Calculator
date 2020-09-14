@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:bgsapp02082020/data/Constants.dart';
 import 'package:bgsapp02082020/data/Project.dart';
 import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/MainScreenViewModel.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'SettingsScreen.dart';
 
@@ -36,9 +38,17 @@ class _MainScreenState extends State<MainScreen> {
 
   FocusNode _focusNode = new FocusNode(); // used to hide soft keyboard
 
+  var numberFormat; //2 decimals and thousand separator format for currencies
+
   @override
   void initState() {
     super.initState();
+
+    // find device local and declare NumberFormat using it
+    findSystemLocale().then((locale) {
+      print(locale);
+      numberFormat = NumberFormat.currency(locale: locale, name: "");
+    });
 
     populateProjectList(); // custom method for populating project list
   }
@@ -107,8 +117,8 @@ class _MainScreenState extends State<MainScreen> {
                           children: <Widget>[
                             ListTile(
                               title: Text(projectList[index].title, style: Theme.of(context).textTheme.subtitle1),
-                              trailing: Text("Duration: ${projectList[index].durationInDay.toString()}\n"
-                                  "Cost: ${projectList[index].cost.toString()}",
+                              trailing: Text("Duration: ${projectList[index].durationInDay.toString()} days\n"
+                                  "Cost: ${numberFormat.format(projectList[index].cost).toString()} ${projectList[index].currency}",
                                   style: Theme.of(context).textTheme.headline5),
                             ),
                           ],
@@ -298,6 +308,18 @@ class _MainScreenState extends State<MainScreen> {
         );
       },
     );
+  }
+
+  /**
+   * Custom method for determining locale of the device
+   */
+  Future<String> findSystemLocale() {
+    try {
+      Intl.systemLocale = Intl.canonicalizedLocale(Platform.localeName);
+    } catch (e) {
+      return Future.value();
+    }
+    return Future.value(Intl.systemLocale);
   }
 
 

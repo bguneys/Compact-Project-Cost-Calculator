@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'AddItemScreenViewModel.dart';
+import 'dart:io';
+import 'package:intl/intl.dart';
 
 class AddItemScreen extends StatefulWidget {
   final Project project;
@@ -39,9 +41,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
   final daysTextFieldController = TextEditingController();
   final workHoursADayTextFieldController = TextEditingController();
 
+  var numberFormat; //2 decimals and thousand separator format for currencies
+
   @override
   void initState() {
     super.initState();
+
+    // find device local and declare NumberFormat using it
+    findSystemLocale().then((locale) {
+      print(locale);
+      numberFormat = NumberFormat.currency(locale: locale, name: "");
+    });
 
     projectId = project.id;
   }
@@ -367,8 +377,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
         if (hourlyCostString.isEmpty || daysString.isEmpty || workHoursInADayString.isEmpty) {
           //do nothing
-          print("Warning total cost: 0");
-          _totalCostString = "Total Cost: 0.00"; // if not all fields entered then total cost shown zero
+          _totalCostString = "${numberFormat.format(0).toString()} ${project.currency}" ; // if not all fields entered then total cost shown zero
 
         } else {
           double hourlyCost = double.parse(hourlyCostString);
@@ -377,11 +386,23 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
           double totalCost = (hourlyCost * workHoursInADay) * days;
 
-          _totalCostString = "Total Cost: " + totalCost.toStringAsFixed(2); // String with 2 digits after comma
+          _totalCostString = "Total Cost: ${numberFormat.format(totalCost).toString()} ${project.currency}";
         }
 
       });
 
+  }
+
+  /**
+   * Custom method for determining locale of the device
+   */
+  Future<String> findSystemLocale() {
+    try {
+      Intl.systemLocale = Intl.canonicalizedLocale(Platform.localeName);
+    } catch (e) {
+      return Future.value();
+    }
+    return Future.value(Intl.systemLocale);
   }
 
 }
