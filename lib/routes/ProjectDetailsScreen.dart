@@ -8,6 +8,8 @@ import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/ProjectDetailsScreenViewModel.dart';
 import 'package:flutter/material.dart';
 
+import 'MainScreen.dart';
+
 class ProjectDetailsScreen extends StatefulWidget {
   final int projectId;
   final String projectTitle;
@@ -82,7 +84,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
           },
         ),
         actions: <Widget>[
@@ -148,7 +150,8 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                    trailing: Text("Duration: ${itemList[index].durationInDay.toString()} days\n"
                                        "Hourly Cost: ${numberFormat.format(itemList[index].hourlyCost).toString()} $projectCurrency\n"
                                        "Total Cost: ${numberFormat.format(itemList[index].cost).toString()} $projectCurrency",
-                                   style: Theme.of(context).textTheme.headline5),
+                                       style: Theme.of(context).textTheme.headline5,
+                                       textAlign: TextAlign.end),
                                  ),
                                  Divider(
                                    color: Theme.of(context).backgroundColor,
@@ -325,7 +328,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
               },
             ),
             FlatButton(
-              child: Text('NO', style: Theme.of(context).textTheme.subtitle1),
+              child: Text('NO', style: Theme.of(context).textTheme.bodyText1),
               onPressed: () {
                 Navigator.of(context).pop();
               },

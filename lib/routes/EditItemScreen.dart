@@ -50,14 +50,20 @@ class _EditItemScreenState extends State<EditItemScreen> {
     findSystemLocale().then((locale) {
       print(locale);
       numberFormat = NumberFormat.currency(locale: locale, name: "");
+    }).then((value) {
+      // initilize TextEditController and total cost values with chosen item values
+      titleTextFieldController.text = item.title;
+      hourlyCostTextFieldController.text = "${numberFormat.format(item.hourlyCost).toString()}";
+      daysTextFieldController.text = item.durationInDay.toString();
+      workHoursADayTextFieldController.text = item.workHoursInADay.toString();
+
+      setState(() {
+        _totalCostString = "${numberFormat.format(item.cost).toString()}";
+      });
+
     });
 
-    // initilize TextEditController and total cost values with chosen item values
-    titleTextFieldController.text = item.title;
-    hourlyCostTextFieldController.text = item.hourlyCost.toString();
-    daysTextFieldController.text = item.durationInDay.toString();
-    workHoursADayTextFieldController.text = item.workHoursInADay.toString();
-    _totalCostString = "${item.cost.toString()}";
+
 
   }
 
@@ -297,14 +303,16 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
-                    child: Text("Total Cost: $_totalCostString ${project.currency}"),
+                    child: Text("Total Cost: $_totalCostString ${project.currency}",
+                      style: Theme.of(context).textTheme.headline4
+                    ),
                   ),
 
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
                       child: RaisedButton(
-                          child: Text('SAVE'),
+                          child: Text('SAVE', style: Theme.of(context).textTheme.subtitle1),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
 

@@ -50,7 +50,7 @@ class MainScreenViewModel {
    * Custom method for navigating to ProjectDetailsScreen with chosen project data
    */
   void navigateToProjectDetailsScreen(BuildContext context, int projectId, String projectTitle) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => ProjectDetailsScreen(projectId: projectId, projectTitle: projectTitle)),
     );

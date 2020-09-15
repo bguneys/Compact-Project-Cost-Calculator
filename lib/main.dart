@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
 
         textTheme: TextTheme(
           headline6: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Color(0xFFFAFAFA)),
-          headline5: TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal, color: Color(0xFF115969), height: 1.5),
+          headline5: TextStyle(fontSize: 12.0, fontWeight: FontWeight.normal, color: Color(0xFF115969), height: 1.5),
           headline4: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Color(0xFFFAFAFA)),
           subtitle1: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Color(0xFF115969)),
           subtitle2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Color(0xFFFAFAFA)),

@@ -61,12 +61,13 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).backgroundColor,
 
       appBar: AppBar(
-        title: Text(widget.title, style: Theme.of(context).textTheme.headline6),
+        title: Text("PROJECTS", style: Theme.of(context).textTheme.headline6),
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,
@@ -119,7 +120,8 @@ class _MainScreenState extends State<MainScreen> {
                               title: Text(projectList[index].title, style: Theme.of(context).textTheme.subtitle1),
                               trailing: Text("Duration: ${projectList[index].durationInDay.toString()} days\n"
                                   "Cost: ${numberFormat.format(projectList[index].cost).toString()} ${projectList[index].currency}",
-                                  style: Theme.of(context).textTheme.headline5),
+                                  style: Theme.of(context).textTheme.headline5,
+                                  textAlign: TextAlign.end),
                             ),
                           ],
                         ),
@@ -299,7 +301,7 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
             FlatButton(
-              child: Text('NO', style: Theme.of(context).textTheme.subtitle1),
+              child: Text('NO', style: Theme.of(context).textTheme.bodyText1),
               onPressed: () {
                 Navigator.of(context).pop();
               },

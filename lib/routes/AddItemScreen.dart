@@ -31,7 +31,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   final _formKey = GlobalKey<FormState>();   // Global key for form
 
-  String _totalCostString = "Total Cost: 0.00"; // total cost calculated for each input
+  String _totalCostString; // total cost calculated for each input
 
   int projectId;
 
@@ -54,6 +54,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
     });
 
     projectId = project.id;
+
+    _totalCostString = "Total Cost: 0.00 ${project.currency}";
   }
 
 
@@ -293,14 +295,15 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
                     Padding(
                       padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
-                      child: Text(_totalCostString),
+                      child: Text(_totalCostString,
+                          style: Theme.of(context).textTheme.headline4),
                     ),
 
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
                         child: RaisedButton(
-                          child: Text('ADD'),
+                          child: Text('ADD', style: Theme.of(context).textTheme.subtitle1),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
 
