@@ -63,7 +63,6 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
 
     // find device local and declare NumberFormat using it
     findSystemLocale().then((locale) {
-      print(locale);
       numberFormat = NumberFormat.currency(locale: locale, name: "");
     });
 
@@ -148,8 +147,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                  ListTile(
                                    title: Text(itemList[index].title, style: Theme.of(context).textTheme.subtitle1),
                                    trailing: Text("Duration: ${itemList[index].durationInDay.toString()} days\n"
-                                       "Hourly Cost: ${numberFormat.format(itemList[index].hourlyCost).toString()} $projectCurrency\n"
-                                       "Total Cost: ${numberFormat.format(itemList[index].cost).toString()} $projectCurrency",
+                                       "Cost: ${numberFormat.format(itemList[index].cost).toString()} $projectCurrency",
                                        style: Theme.of(context).textTheme.headline5,
                                        textAlign: TextAlign.end),
                                  ),
@@ -258,7 +256,11 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
               durationInDay: element.durationInDay,
               cost: element.cost,
               hourlyCost: element.hourlyCost,
-              workHoursInADay: element.workHoursInADay));
+              unitCost: element.unitCost,
+              onetimeCost: element.onetimeCost,
+              units: element.units,
+              workHoursInADay: element.workHoursInADay,
+              costType: element.costType));
 
           // calculate total cost, duration, hours for the project
           totalProjectCost = totalProjectCost + element.cost;

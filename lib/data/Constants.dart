@@ -20,6 +20,11 @@ class Constants {
   static final columnItemDurationInDay = 'item_durationInDay';
   static final columnItemCost = 'item_cost';
   static final columnItemHourlyCost = 'item_hourlyCost';
+  static final columnItemUnitCost = 'item_unitCost';
+  static final columnItemOnetimeCost = 'item_onetimeCost';
+  static final columnItemUnits = 'item_units';
   static final columnItemWorkHoursInADay = 'item_workHoursInADay';
+  static final columnItemCostType = 'item_costType';
   static final columnItemProjectId = 'item_project_id';
+
 }

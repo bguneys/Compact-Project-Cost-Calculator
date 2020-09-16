@@ -1,3 +1,4 @@
+import 'package:bgsapp02082020/data/CostType.dart';
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
 import 'package:bgsapp02082020/data/Project.dart';
@@ -40,8 +41,21 @@ class _AddItemScreenState extends State<AddItemScreen> {
   final hourlyCostTextFieldController = TextEditingController();
   final daysTextFieldController = TextEditingController();
   final workHoursADayTextFieldController = TextEditingController();
+  final unitCostTextFieldController = TextEditingController();
+  final onetimeCostTextFieldController = TextEditingController();
+  final unitsTextFieldController = TextEditingController();
 
   var numberFormat; //2 decimals and thousand separator format for currencies
+
+  CostType _selectedCostType = CostType.hourly;
+
+  // booleans for widgets to change visibility depending on the cost type selected
+  bool _isHourlyCostVisible = true;
+  bool _isUnitCostVisible = false;
+  bool _isUnitsVisible = false;
+  bool _isOnetimeCostVisible = false;
+  bool _isWorkHoursVisible = true;
+
 
   @override
   void initState() {
@@ -147,49 +161,363 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                      padding: const EdgeInsets.fromLTRB(0.0, 16.0, 16.0, 24.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Hourly Cost (${project.currency}):", style: Theme.of(context).textTheme.headline4),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(24.0, 0.0, 0.0, 0.0),
+                            child: Text("Cost Type:", style: Theme.of(context).textTheme.headline4),
+                          ),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                                Expanded(
-                                    child: Theme(
-                                      data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
-                                      child: TextFormField(
-                                          style: Theme.of(context).textTheme.bodyText2,
-                                          controller: hourlyCostTextFieldController,
-                                          keyboardType: TextInputType.number,
-                                          onChanged: _calculateTotalCost,
-                                          validator: (value) {
-                                            if (value.isEmpty) {
-                                              return "Please enter some value";
-                                            }
-                                            return null;
-                                          },
-                                          decoration: InputDecoration(
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Theme.of(context).cardColor
-                                                ),
-                                                borderRadius: BorderRadius.all(Radius.circular(45)),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Theme.of(context).cardColor
-                                                ),
-                                                borderRadius: BorderRadius.all(Radius.circular(45)),
-                                              ),
-                                              hintText: "Type hourly cost..",
-                                              contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
-                                          ),
-                                        ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(24.0, 0.0, 12.0, 0.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Theme(
+                                      data: ThemeData(unselectedWidgetColor: Theme.of(context).cardColor),
+                                      child: Radio(
+                                        value: CostType.hourly,
+                                        groupValue: _selectedCostType,
+                                        activeColor: Color(0xFFFFc640),
+                                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                        onChanged: (CostType value) {
+                                          setState(() {
+                                            _selectedCostType = value;
+
+                                            // change visibility of the widgets accordingly
+                                            _isHourlyCostVisible = true;
+                                            _isUnitCostVisible = false;
+                                            _isOnetimeCostVisible = false;
+                                            _isWorkHoursVisible = true;
+                                            _isUnitsVisible = false;
+                                          });
+                                        },
+                                      ),
                                     ),
-                                ),
+                                    Text("Hourly", style: Theme.of(context).textTheme.bodyText2)
+                                  ],
+                                )
+                              ),
+
+                              Padding(
+                                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 12.0, 0.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Theme(
+                                        data: ThemeData(unselectedWidgetColor: Theme.of(context).cardColor),
+                                        child: Radio(
+                                          value: CostType.unit,
+                                          groupValue: _selectedCostType,
+                                          activeColor: Color(0xFFFFc640),
+                                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                          onChanged: (CostType value) {
+                                            setState(() {
+                                              _selectedCostType = value;
+
+                                              // change visibility of the widgets accordingly
+                                              _isHourlyCostVisible = false;
+                                              _isUnitCostVisible = true;
+                                              _isOnetimeCostVisible = false;
+                                              _isWorkHoursVisible = false;
+                                              _isUnitsVisible = true;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      Text("Unit")
+                                    ],
+                                  )
+                              ),
+
+                              Padding(
+                                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 16.0, 0.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Theme(
+                                        data: ThemeData(unselectedWidgetColor: Theme.of(context).cardColor),
+                                        child: Radio(
+                                          value: CostType.oneTime,
+                                          groupValue: _selectedCostType,
+                                          activeColor: Color(0xFFFFc640),
+                                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                          onChanged: (CostType value) {
+                                            setState(() {
+                                              _selectedCostType = value;
+
+                                              // change visibility of the widgets accordingly
+                                              _isHourlyCostVisible = false;
+                                              _isUnitCostVisible = false;
+                                              _isOnetimeCostVisible = true;
+                                              _isWorkHoursVisible = false;
+                                              _isUnitsVisible = false;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      Text("One-time")
+                                    ],
+                                  )
+                              ),
                             ],
                           ),
                         ],
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: _isHourlyCostVisible,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Hourly Cost (${project.currency}):", style: Theme.of(context).textTheme.headline4),
+                            Row(
+                              children: <Widget>[
+                                  Expanded(
+                                      child: Theme(
+                                        data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                        child: TextFormField(
+                                            style: Theme.of(context).textTheme.bodyText2,
+                                            controller: hourlyCostTextFieldController,
+                                            keyboardType: TextInputType.number,
+                                            onChanged: _calculateTotalCost,
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return "Please enter value";
+                                              }
+                                              return null;
+                                            },
+                                            decoration: InputDecoration(
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Theme.of(context).cardColor
+                                                  ),
+                                                  borderRadius: BorderRadius.all(Radius.circular(45)),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Theme.of(context).cardColor
+                                                  ),
+                                                  borderRadius: BorderRadius.all(Radius.circular(45)),
+                                                ),
+                                                hintText: "Type hourly cost..",
+                                                contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                            ),
+                                          ),
+                                      ),
+                                  ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: _isUnitCostVisible,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Unit Cost (${project.currency}):", style: Theme.of(context).textTheme.headline4),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Theme(
+                                    data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                    child: TextFormField(
+                                      style: Theme.of(context).textTheme.bodyText2,
+                                      controller: unitCostTextFieldController,
+                                      keyboardType: TextInputType.number,
+                                      onChanged: _calculateTotalCost,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return "Please enter value";
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context).cardColor
+                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(45)),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context).cardColor
+                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(45)),
+                                        ),
+                                        hintText: "Type unit cost..",
+                                        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: _isOnetimeCostVisible,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("One-Time Cost (${project.currency}):", style: Theme.of(context).textTheme.headline4),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Theme(
+                                    data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                    child: TextFormField(
+                                      style: Theme.of(context).textTheme.bodyText2,
+                                      controller: onetimeCostTextFieldController,
+                                      keyboardType: TextInputType.number,
+                                      onChanged: _calculateTotalCost,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return "Please enter value";
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context).cardColor
+                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(45)),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context).cardColor
+                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(45)),
+                                        ),
+                                        hintText: "Type unit cost..",
+                                        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: _isUnitsVisible,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Units:", style: Theme.of(context).textTheme.headline4),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Theme(
+                                    data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                    child: TextFormField(
+                                      style: Theme.of(context).textTheme.bodyText2,
+                                      controller: unitsTextFieldController,
+                                      keyboardType: TextInputType.number,
+                                      onChanged: _calculateTotalCost,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return "Please enter value";
+                                        }
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context).cardColor
+                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(45)),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context).cardColor
+                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(45)),
+                                        ),
+                                        hintText: "Type units..",
+                                        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    Visibility(
+                      visible: _isWorkHoursVisible,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Work Hours in a Day:", style: Theme.of(context).textTheme.headline4),
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Theme(
+                                    data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
+                                    child: TextFormField(
+                                      style: Theme.of(context).textTheme.bodyText2,
+                                      controller: workHoursADayTextFieldController,
+                                      keyboardType: TextInputType.number,
+                                      onChanged: _calculateTotalCost,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return "Please enter some value";
+                                        } else if (double.parse(value) > 24) {
+                                          return "Working hours a day can't be above 24";
+                                        }
+
+                                        return null;
+                                      },
+                                      decoration: InputDecoration(
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context).cardColor
+                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(45)),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Theme.of(context).cardColor
+                                          ),
+                                          borderRadius: BorderRadius.all(Radius.circular(45)),
+                                        ),
+                                        hintText: "Type working hours a day..",
+                                        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
 
@@ -214,7 +542,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                       onChanged: _calculateTotalCost,
                                       validator: (value) {
                                         if (value.isEmpty) {
-                                          return "Please enter some value";
+                                          return "Duration must be 0 or greater";
                                         }
                                         return null;
                                       },
@@ -244,56 +572,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Work Hours in a day", style: Theme.of(context).textTheme.headline4),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Theme(
-                                  data: ThemeData(primaryColor: Color(0xFFFAFAFA), hintColor: Color.fromARGB(100, 255, 255, 255)),
-                                  child: TextFormField(
-                                      style: Theme.of(context).textTheme.bodyText2,
-                                      controller: workHoursADayTextFieldController,
-                                      keyboardType: TextInputType.number,
-                                      onChanged: _calculateTotalCost,
-                                      validator: (value) {
-                                        if (value.isEmpty) {
-                                          return "Please enter some value";
-                                        } else if (double.parse(value) > 24) {
-                                          return "Working hours a day can't be above 24";
-                                        }
-
-                                        return null;
-                                      },
-                                      decoration: InputDecoration(
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Theme.of(context).cardColor
-                                            ),
-                                            borderRadius: BorderRadius.all(Radius.circular(45)),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Theme.of(context).cardColor
-                                            ),
-                                            borderRadius: BorderRadius.all(Radius.circular(45)),
-                                          ),
-                                          hintText: "Type working hours a day..",
-                                          contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
-                                      ),
-                                    ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Padding(
                       padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
                       child: Text(_totalCostString,
                           style: Theme.of(context).textTheme.headline4),
@@ -307,32 +585,87 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
 
-                              // calculate total cost from inputs
-                              String titleString = titleTextFieldController.text;
-                              String hourlyCostString = hourlyCostTextFieldController.text;
-                              String daysString = daysTextFieldController.text;
-                              String workHoursInADayString = workHoursADayTextFieldController.text;
+                              // create item depending on the cost type selected
+                              Item item;
 
-                              double hourlyCost = double.parse(hourlyCostString);
-                              int days = int.parse(daysString);
-                              double workHoursInADay = double.parse(workHoursInADayString);
+                              if (_selectedCostType == CostType.hourly) {
+                                // calculate total cost from inputs
+                                String titleString = titleTextFieldController.text;
+                                String hourlyCostString = hourlyCostTextFieldController.text;
+                                String daysString = daysTextFieldController.text;
+                                String workHoursInADayString = workHoursADayTextFieldController.text;
 
-                              double totalCost = (hourlyCost * workHoursInADay) * days;
+                                double hourlyCost = double.parse(hourlyCostString);
+                                int days = int.parse(daysString);
+                                double workHoursInADay = double.parse(workHoursInADayString);
 
-                              // insert Item to the database
-                              var item = Item(title: titleString,
-                                  hourlyCost: hourlyCost,
-                                  durationInDay: days,
-                                  cost: totalCost,
-                                  workHoursInADay: workHoursInADay,
-                                  projectId: projectId);
+                                double totalCost = (hourlyCost * workHoursInADay) * days;
+
+                                // insert Item to the database
+                                item = Item(title: titleString,
+                                    hourlyCost: hourlyCost,
+                                    durationInDay: days,
+                                    cost: totalCost,
+                                    unitCost: 0.0,
+                                    onetimeCost: 0.0,
+                                    units: 0,
+                                    workHoursInADay: workHoursInADay,
+                                    costType: CostType.hourly.index,
+                                    projectId: projectId);
+
+                              } else if(_selectedCostType == CostType.unit) {
+                                // calculate total cost from inputs
+                                String titleString = titleTextFieldController.text;
+                                String unitCostString = unitCostTextFieldController.text;
+                                String daysString = daysTextFieldController.text;
+                                String unitsString = unitsTextFieldController.text;
+
+                                double unitCost = double.parse(unitCostString);
+                                int days = int.parse(daysString);
+                                int units = int.parse(unitsString);
+
+                                double totalCost = (unitCost * units);
+
+                                // insert Item to the database
+                                item = Item(title: titleString,
+                                    hourlyCost: 0.0,
+                                    durationInDay: days,
+                                    cost: totalCost,
+                                    unitCost: unitCost,
+                                    onetimeCost: 0.0,
+                                    units: units,
+                                    workHoursInADay: 0.0,
+                                    costType: CostType.unit.index,
+                                    projectId: projectId);
+
+                              } else if(_selectedCostType == CostType.oneTime) {
+                                // calculate total cost from inputs
+                                String titleString = titleTextFieldController.text;
+                                String onetimeCostString = onetimeCostTextFieldController.text;
+                                String daysString = daysTextFieldController.text;
+
+                                double onetimeCost = double.parse(onetimeCostString);
+                                int days = int.parse(daysString);
+
+                                double totalCost = onetimeCost;
+
+                                // insert Item to the database
+                                item = Item(title: titleString,
+                                    hourlyCost: 0.0,
+                                    durationInDay: days,
+                                    cost: totalCost,
+                                    unitCost: 0.0,
+                                    onetimeCost: onetimeCost,
+                                    units: 0,
+                                    workHoursInADay: 0.0,
+                                    costType: CostType.oneTime.index,
+                                    projectId: projectId);
+                              }
 
                               await addItemScreenViewModel.insertItem(item);
 
                               // go to ProjectDetailsScreen after inserting Item into database
                               addItemScreenViewModel.navigateToProjectDetailsScreen(context, project.id, project.title);
-
-                              //print("title: " + titleString + " - hourlyCost: " + hourlyCost.toString() + " - days: " + days.toString() + " - total cost " + totalCost.toString() + " - projectId: " + project.id.toString());
                             }
                           }
                         ),
@@ -353,6 +686,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
     hourlyCostTextFieldController.dispose();
     daysTextFieldController.dispose();
     workHoursADayTextFieldController.dispose();
+    unitCostTextFieldController.dispose();
+    onetimeCostTextFieldController.dispose();
+    unitsTextFieldController.dispose();
     
     super.dispose();
 
@@ -371,6 +707,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
    */
   void _calculateTotalCost(String value) {
 
+    if (_selectedCostType == CostType.hourly) {
       // calculate total cost from inputs
       String hourlyCostString = hourlyCostTextFieldController.text;
       String daysString = daysTextFieldController.text;
@@ -391,9 +728,53 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
           _totalCostString = "Total Cost: ${numberFormat.format(totalCost).toString()} ${project.currency}";
         }
-
       });
 
+    } else if(_selectedCostType == CostType.unit) {
+      // calculate total cost from inputs
+      String unitCostString = unitCostTextFieldController.text;
+      //String daysString = daysTextFieldController.text;
+      String unitsString = unitsTextFieldController.text;
+
+      setState(() {
+
+        if (unitCostString.isEmpty || unitsString.isEmpty) {
+          //do nothing
+          _totalCostString = "${numberFormat.format(0).toString()} ${project.currency}" ; // if not all fields entered then total cost shown zero
+
+        } else {
+          double unitCost = double.parse(unitCostString);
+          //int days = int.parse(daysString);
+          int units = int.parse(unitsString);
+
+          double totalCost = (unitCost * units);
+
+          _totalCostString = "Total Cost: ${numberFormat.format(totalCost).toString()} ${project.currency}";
+        }
+      });
+
+    } else if(_selectedCostType == CostType.oneTime) {
+      // calculate total cost from inputs
+      String onetimeCostString = onetimeCostTextFieldController.text;
+      //String daysString = daysTextFieldController.text;
+
+      setState(() {
+
+        if (onetimeCostString.isEmpty) {
+          //do nothing
+          _totalCostString = "${numberFormat.format(0).toString()} ${project.currency}" ; // if not all fields entered then total cost shown zero
+
+        } else {
+          double onetimeCost = double.parse(onetimeCostString);
+          //int days = int.parse(daysString);
+
+          double totalCost = onetimeCost;
+
+          _totalCostString = "Total Cost: ${numberFormat.format(totalCost).toString()} ${project.currency}";
+        }
+      });
+
+    }
   }
 
   /**
