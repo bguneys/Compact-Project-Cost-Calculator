@@ -1,3 +1,4 @@
+import 'package:bgsapp02082020/data/AppStrings.dart';
 import 'package:flutter/material.dart';
 
 import 'AboutScreen.dart';
@@ -10,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
 
       appBar: AppBar(
-        title: Text("SETTINGS", style: Theme.of(context).textTheme.headline6),
+        title: Text(AppStrings.settingsScreenTitle, style: Theme.of(context).textTheme.headline6),
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,
@@ -34,7 +35,7 @@ class SettingsScreen extends StatelessWidget {
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: Text("Disclaimer", style: Theme.of(context).textTheme.subtitle2),
+                          child: Text(AppStrings.disclaimerLabel, style: Theme.of(context).textTheme.subtitle2),
                         ),
                       ),
                   ),
@@ -55,47 +56,12 @@ class SettingsScreen extends StatelessWidget {
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text("About", style: Theme.of(context).textTheme.subtitle2),
+                        child: Text(AppStrings.aboutLabel, style: Theme.of(context).textTheme.subtitle2),
                       ),
                     ),
                 ),
               ],
             ),
-/*
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: InkWell(
-                    splashColor: Colors.blue.withAlpha(30),
-                    onTap: () {
-                      print('Item tapped.');
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text("Share the app"),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: InkWell(
-                    splashColor: Colors.blue.withAlpha(30),
-                    onTap: () {
-                      print('Item tapped.');
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Text("Rate the app"),
-                    ),
-                  ),
-                ),
-              ],
-            ),
- */
           ],
         ),
       ) ,

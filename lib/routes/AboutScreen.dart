@@ -1,3 +1,4 @@
+import 'package:bgsapp02082020/data/AppStrings.dart';
 import 'package:flutter/material.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -7,7 +8,7 @@ class AboutScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
 
       appBar: AppBar(
-        title: Text("ABOUT", style: Theme.of(context).textTheme.headline6),
+        title: Text(AppStrings.aboutScreenTitle, style: Theme.of(context).textTheme.headline6),
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,

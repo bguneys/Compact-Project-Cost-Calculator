@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:bgsapp02082020/data/Constants.dart';
+import 'package:bgsapp02082020/data/AppStrings.dart';
 import 'package:bgsapp02082020/data/Project.dart';
 import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/MainScreenViewModel.dart';
@@ -67,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
       backgroundColor: Theme.of(context).backgroundColor,
 
       appBar: AppBar(
-        title: Text("PROJECTS", style: Theme.of(context).textTheme.headline6),
+        title: Text(AppStrings.mainScreenTitle, style: Theme.of(context).textTheme.headline6),
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,
@@ -76,7 +76,7 @@ class _MainScreenState extends State<MainScreen> {
             onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {'Settings'}.map((String choice) {
+              return {AppStrings.settingsOptionsMenuLabel}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -118,8 +118,8 @@ class _MainScreenState extends State<MainScreen> {
                           children: <Widget>[
                             ListTile(
                               title: Text(projectList[index].title, style: Theme.of(context).textTheme.subtitle1),
-                              trailing: Text("Duration: ${projectList[index].durationInDay.toString()} days\n"
-                                  "Cost: ${numberFormat.format(projectList[index].cost).toString()} ${projectList[index].currency}",
+                              trailing: Text("${AppStrings.durationLabel} ${projectList[index].durationInDay.toString()} ${AppStrings.daysLabel}\n"
+                                  "${AppStrings.costLabel} ${numberFormat.format(projectList[index].cost).toString()} ${projectList[index].currency}",
                                   style: Theme.of(context).textTheme.headline5,
                                   textAlign: TextAlign.end),
                             ),
@@ -158,7 +158,7 @@ class _MainScreenState extends State<MainScreen> {
                                 ),
                                 borderRadius: BorderRadius.all(Radius.circular(45)),
                               ),
-                              hintText: "Type new project title..",
+                              hintText: AppStrings.projectTitleHintText,
                               contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                             ),
                             controller: textController,
@@ -174,7 +174,7 @@ class _MainScreenState extends State<MainScreen> {
                           backgroundColor: Color(0xFFFFc640),
                           foregroundColor: Theme.of(context).backgroundColor,
                           onPressed: _addProject,
-                          tooltip: 'Add Project',
+                          tooltip: AppStrings.addProjectFABTooltip,
                           child: Icon(Icons.add, size: 32.0),
 
                         ),
@@ -235,13 +235,13 @@ class _MainScreenState extends State<MainScreen> {
                                   durationInDay: 0,
                                   hourlyCost: 0.0,
                                   note: "",
-                                  currency: "USD");
+                                  currency: AppStrings.currencyUSD);
 
       // if a Project with same name exists in database then give a warning message
       // await keyword is used here to make flow to wait for this block execution
       await projectList.forEach((element) {
         if (sampleProject.title == element.title) {
-          var snackBar = SnackBar(content: Text('Project with same title exists'));
+          var snackBar = SnackBar(content: Text(AppStrings.projectWithSameTitleSnackBarMessage));
           _scaffoldKey.currentState.showSnackBar(snackBar);
           isProjectNameSame = true; // make boolean true if there is a project with same name
         }
@@ -260,9 +260,8 @@ class _MainScreenState extends State<MainScreen> {
       }
 
     } else {
-        var snackBar = SnackBar(content: Text('Project title can\'t be empty'));
+        var snackBar = SnackBar(content: Text(AppStrings.projectTitleEmptySnackBarMessage));
         _scaffoldKey.currentState.showSnackBar(snackBar);
-        print("Project title can\'t be empty");
     }
 
   }
@@ -290,10 +289,10 @@ class _MainScreenState extends State<MainScreen> {
       barrierDismissible: false, // user must tap button to close dialog
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Project?', style: Theme.of(context).textTheme.bodyText1),
+          title: Text(AppStrings.deleteProjectMessage, style: Theme.of(context).textTheme.bodyText1),
           actions: <Widget>[
             FlatButton(
-              child: Text('YES', style: Theme.of(context).textTheme.subtitle1),
+              child: Text(AppStrings.yes, style: Theme.of(context).textTheme.subtitle1),
               onPressed: () {
                 _deleteProject(longTappedProject);
                 populateProjectList();
@@ -301,7 +300,7 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
             FlatButton(
-              child: Text('NO', style: Theme.of(context).textTheme.bodyText1),
+              child: Text(AppStrings.no, style: Theme.of(context).textTheme.bodyText1),
               onPressed: () {
                 Navigator.of(context).pop();
               },

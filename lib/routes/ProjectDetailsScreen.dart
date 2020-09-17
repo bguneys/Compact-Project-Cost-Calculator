@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:bgsapp02082020/data/AppStrings.dart';
 import 'package:intl/intl.dart';
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
@@ -98,7 +99,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
             onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {'Settings'}.map((String choice) {
+              return {AppStrings.settingsOptionsMenuLabel}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -146,8 +147,8 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                children: <Widget>[
                                  ListTile(
                                    title: Text(itemList[index].title, style: Theme.of(context).textTheme.subtitle1),
-                                   trailing: Text("Duration: ${itemList[index].durationInDay.toString()} days\n"
-                                       "Cost: ${numberFormat.format(itemList[index].cost).toString()} $projectCurrency",
+                                   trailing: Text("${AppStrings.durationLabel} ${itemList[index].durationInDay.toString()} ${AppStrings.daysLabel}\n"
+                                       "${AppStrings.costLabel} ${numberFormat.format(itemList[index].cost).toString()} $projectCurrency",
                                        style: Theme.of(context).textTheme.headline5,
                                        textAlign: TextAlign.end),
                                  ),
@@ -181,19 +182,19 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 4.0),
-                              child: Text("Total cost: ${numberFormat.format(totalProjectCost).toString()} $projectCurrency",
+                              child: Text("${AppStrings.totalCostLabel} ${numberFormat.format(totalProjectCost).toString()} $projectCurrency",
                                   style: Theme.of(context).textTheme.subtitle2),
                             ),
 
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-                              child: Text("Total hourly cost: ${numberFormat.format(totalProjectHourlyCost).toString()} $projectCurrency/h",
+                              child: Text("${AppStrings.totalHourlyCostLabel} ${numberFormat.format(totalProjectHourlyCost).toString()} $projectCurrency${AppStrings.perHourSymbol}",
                                   style: Theme.of(context).textTheme.subtitle2),
                             ),
 
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 16.0),
-                              child: Text("Total duration: ${totalProjectDuration.toString()} days",
+                              child: Text("${AppStrings.totalDurationLabel} ${totalProjectDuration.toString()} ${AppStrings.daysLabel}",
                                   style: Theme.of(context).textTheme.subtitle2),
                             ),
                           ],
@@ -207,7 +208,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           child: FloatingActionButton(
                             backgroundColor: Color(0xFFFFc640),
                             foregroundColor: Theme.of(context).backgroundColor,
-                            tooltip: 'Add Item',
+                            tooltip: AppStrings.addItemFABTooltip,
                             child: Icon(Icons.add, size: 32.0),
                             onPressed: () {
                               projectDetailsScreenViewModel.navigateToAddItemScreen(context, selectedProject);
@@ -319,10 +320,10 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
       barrierDismissible: false, // user must tap button to close dialog
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Item?', style: Theme.of(context).textTheme.bodyText1),
+          title: Text(AppStrings.deleteProjectMessage, style: Theme.of(context).textTheme.bodyText1),
           actions: <Widget>[
             FlatButton(
-              child: Text('YES', style: Theme.of(context).textTheme.subtitle1),
+              child: Text(AppStrings.yes, style: Theme.of(context).textTheme.subtitle1),
               onPressed: () {
                 _deleteItem(longTappedItem);
                 populateItemList();
@@ -330,7 +331,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
               },
             ),
             FlatButton(
-              child: Text('NO', style: Theme.of(context).textTheme.bodyText1),
+              child: Text(AppStrings.no, style: Theme.of(context).textTheme.bodyText1),
               onPressed: () {
                 Navigator.of(context).pop();
               },

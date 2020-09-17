@@ -1,5 +1,3 @@
-
-
 class Constants {
 
   static final databaseName = "project_database.db";

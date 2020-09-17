@@ -1,3 +1,4 @@
+import 'package:bgsapp02082020/data/AppStrings.dart';
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
 import 'package:bgsapp02082020/data/Project.dart';
@@ -35,9 +36,14 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
   final projectNoteTextFieldController = TextEditingController();
   //final projectCurrencyTextFieldController = TextEditingController();
 
-  String dropdownValue = 'USD'; //DropDownButton initial value
+  String dropdownValue = AppStrings.currencyUSD; //DropDownButton initial value
 
-  List<String> currencyOptions = <String>['USD', 'EUR', 'GBP', 'TRY'];
+  List<String> currencyOptions = <String>[
+    AppStrings.currencyUSD,
+    AppStrings.currencyEUR,
+    AppStrings.currencyGBP,
+    AppStrings.currencyTRY
+  ];
 
   @override
   void initState() {
@@ -68,7 +74,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
             onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {'Settings'}.map((String choice) {
+              return {AppStrings.settingsOptionsMenuLabel}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -95,7 +101,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Project Notes:", style: Theme.of(context).textTheme.headline4),
+                        Text(AppStrings.projectsNotesLabel, style: Theme.of(context).textTheme.headline4),
                         Row(
                           children: <Widget>[
                             Expanded(
@@ -119,7 +125,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                                       ),
                                       borderRadius: BorderRadius.all(Radius.circular(45)),
                                     ),
-                                    hintText: "Type notes..",
+                                    hintText: AppStrings.projectsNotesHintText,
                                     contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
                                   ),
                                 ),
@@ -135,7 +141,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                     padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
                     child: Row(
                       children: <Widget>[
-                        Text("Project Currency:", style: Theme.of(context).textTheme.headline4),
+                        Text(AppStrings.projectsCurrencyLabel, style: Theme.of(context).textTheme.headline4),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(8.0, 0.0, 0.0, 0.0),
                           child: Container(
@@ -181,7 +187,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
                       child: RaisedButton(
-                          child: Text('Save'),
+                          child: Text(AppStrings.saveButtonLabel),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               // calculate total cost from inputs

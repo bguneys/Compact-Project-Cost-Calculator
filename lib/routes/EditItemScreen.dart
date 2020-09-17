@@ -1,3 +1,4 @@
+import 'package:bgsapp02082020/data/AppStrings.dart';
 import 'package:bgsapp02082020/data/CostType.dart';
 import 'package:bgsapp02082020/data/Item.dart';
 import 'package:bgsapp02082020/data/ItemRepository.dart';
@@ -136,7 +137,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
             onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {'Settings'}.map((String choice) {
+              return {AppStrings.settingsOptionsMenuLabel}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -163,7 +164,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Title:", style: Theme.of(context).textTheme.headline4),
+                        Text(AppStrings.titleLabel, style: Theme.of(context).textTheme.headline4),
                         Row(
                           children: <Widget>[
                             Expanded(
@@ -174,7 +175,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                   controller: titleTextFieldController,
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      return "Please enter some value";
+                                      return AppStrings.enterValueMessage;
                                     }
                                     return null;
                                   },
@@ -191,7 +192,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                         ),
                                         borderRadius: BorderRadius.all(Radius.circular(45)),
                                       ),
-                                      hintText: "Type new item title..",
+                                      hintText: AppStrings.itemTitleHintText,
                                       contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                   ),
                                 ),
@@ -210,7 +211,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.fromLTRB(24.0, 0.0, 0.0, 0.0),
-                          child: Text("Cost Type:", style: Theme.of(context).textTheme.headline4),
+                          child: Text(AppStrings.costTypeLabel, style: Theme.of(context).textTheme.headline4),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -241,7 +242,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                         },
                                       ),
                                     ),
-                                    Text("Hourly", style: Theme.of(context).textTheme.bodyText2)
+                                    Text(AppStrings.hourlyOptionLabel, style: Theme.of(context).textTheme.bodyText2)
                                   ],
                                 )
                             ),
@@ -271,7 +272,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                         },
                                       ),
                                     ),
-                                    Text("Unit")
+                                    Text(AppStrings.unitOptionLabel)
                                   ],
                                 )
                             ),
@@ -301,7 +302,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                         },
                                       ),
                                     ),
-                                    Text("One-time")
+                                    Text(AppStrings.onetimeOptionLabel)
                                   ],
                                 )
                             ),
@@ -318,7 +319,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Hourly Cost (${project.currency}):", style: Theme.of(context).textTheme.headline4),
+                          Text("${AppStrings.hourlyCostText} (${project.currency}):", style: Theme.of(context).textTheme.headline4),
                           Row(
                             children: <Widget>[
                               Expanded(
@@ -331,7 +332,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                     onChanged: _calculateTotalCost,
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return "Please enter value";
+                                        return AppStrings.enterValueMessage;
                                       }
                                       return null;
                                     },
@@ -348,7 +349,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                           ),
                                           borderRadius: BorderRadius.all(Radius.circular(45)),
                                         ),
-                                        hintText: "Type hourly cost..",
+                                        hintText: AppStrings.hourlyCostHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                     ),
                                   ),
@@ -368,7 +369,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Unit Cost (${project.currency}):", style: Theme.of(context).textTheme.headline4),
+                          Text("${AppStrings.unitCostText} (${project.currency}):", style: Theme.of(context).textTheme.headline4),
                           Row(
                             children: <Widget>[
                               Expanded(
@@ -381,7 +382,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                     onChanged: _calculateTotalCost,
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return "Please enter value";
+                                        return AppStrings.enterValueMessage;
                                       }
                                       return null;
                                     },
@@ -398,7 +399,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                         ),
                                         borderRadius: BorderRadius.all(Radius.circular(45)),
                                       ),
-                                      hintText: "Type unit cost..",
+                                      hintText: AppStrings.unitCostHintText,
                                       contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                     ),
                                   ),
@@ -418,7 +419,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("One-Time Cost (${project.currency}):", style: Theme.of(context).textTheme.headline4),
+                          Text("${AppStrings.onetimeCostText} (${project.currency}):", style: Theme.of(context).textTheme.headline4),
                           Row(
                             children: <Widget>[
                               Expanded(
@@ -431,7 +432,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                     onChanged: _calculateTotalCost,
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return "Please enter value";
+                                        return AppStrings.enterValueMessage;
                                       }
                                       return null;
                                     },
@@ -448,7 +449,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                         ),
                                         borderRadius: BorderRadius.all(Radius.circular(45)),
                                       ),
-                                      hintText: "Type unit cost..",
+                                      hintText: AppStrings.onetimeCostHintText,
                                       contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                     ),
                                   ),
@@ -468,7 +469,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Units:", style: Theme.of(context).textTheme.headline4),
+                          Text(AppStrings.unitsLabel, style: Theme.of(context).textTheme.headline4),
                           Row(
                             children: <Widget>[
                               Expanded(
@@ -481,7 +482,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                     onChanged: _calculateTotalCost,
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return "Please enter value";
+                                        return AppStrings.enterValueMessage;
                                       }
                                       return null;
                                     },
@@ -498,7 +499,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                         ),
                                         borderRadius: BorderRadius.all(Radius.circular(45)),
                                       ),
-                                      hintText: "Type units..",
+                                      hintText: AppStrings.unitsHintText,
                                       contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                     ),
                                   ),
@@ -518,7 +519,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Working Hours in a Day:", style: Theme.of(context).textTheme.headline4),
+                          Text(AppStrings.workHoursLabel, style: Theme.of(context).textTheme.headline4),
                           Row(
                             children: <Widget>[
                               Expanded(
@@ -531,9 +532,9 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                     onChanged: _calculateTotalCost,
                                     validator: (value) {
                                       if (value.isEmpty) {
-                                        return "Please enter some value";
+                                        return AppStrings.enterValueMessage;
                                       }else if (double.parse(value) > 24) {
-                                        return "Working hours a day can't be above 24";
+                                        return AppStrings.workHoursAbove24HoursMessage;
                                       }
 
                                       return null;
@@ -551,7 +552,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                         ),
                                         borderRadius: BorderRadius.all(Radius.circular(45)),
                                       ),
-                                      hintText: "Type working hours a day..",
+                                      hintText: AppStrings.workHoursHintText,
                                       contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                     ),
                                   ),
@@ -569,7 +570,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Duration (days):", style: Theme.of(context).textTheme.headline4),
+                        Text(AppStrings.durationDaysLabel, style: Theme.of(context).textTheme.headline4),
                         Row(
                           children: <Widget>[
                             Expanded(
@@ -585,8 +586,12 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                   onChanged: _calculateTotalCost,
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      return "Duration must be 0 or greater";
+                                      return AppStrings.enterValueMessage;
+
+                                    }else if (double.parse(value) < 0) {
+                                      return AppStrings.durationAboveZeroMessage;
                                     }
+
                                     return null;
                                   },
                                   decoration: InputDecoration(
@@ -602,7 +607,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                                         ),
                                         borderRadius: BorderRadius.all(Radius.circular(45)),
                                       ),
-                                      hintText: "Type estimated duration..",
+                                      hintText: AppStrings.durationHintText,
                                       contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                   ),
                                 ),
@@ -616,7 +621,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
                   Padding(
                     padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
-                    child: Text("Total Cost: $_totalCostString ${project.currency}",
+                    child: Text("${AppStrings.totalCostLabel} $_totalCostString ${project.currency}",
                       style: Theme.of(context).textTheme.headline4
                     ),
                   ),
@@ -625,7 +630,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
                       child: RaisedButton(
-                          child: Text('SAVE', style: Theme.of(context).textTheme.subtitle1),
+                          child: Text(AppStrings.saveButtonLabel, style: Theme.of(context).textTheme.subtitle1),
                           onPressed: () async {
                             if (_formKey.currentState.validate()) {
 
@@ -713,8 +718,6 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
                               // go to ProjectDetailsScreen after inserting Item into database
                               editItemScreenViewModel.navigateToProjectDetailsScreen(context, project.id, project.title);
-
-                              //print("title: " + titleString + " - hourlyCost: " + hourlyCost.toString() + " - days: " + days.toString() + " - total cost " + totalCost.toString() + " - projectId: " + project.id.toString());
                             }
                           }
                       ),
@@ -766,7 +769,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
 
         if (hourlyCostString.isEmpty || daysString.isEmpty || workHoursInADayString.isEmpty) {
           //do nothing
-          _totalCostString = "Total Cost: ${numberFormat.format(0).toString()} ${project.currency}"; // if not all fields entered then total cost shown zero
+          _totalCostString = "${AppStrings.totalCostLabel} ${numberFormat.format(0).toString()} ${project.currency}"; // if not all fields entered then total cost shown zero
 
         } else {
           double hourlyCost = double.parse(hourlyCostString);
