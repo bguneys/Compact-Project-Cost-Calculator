@@ -1,5 +1,5 @@
 # Compact Project Cost Calculator
-<img src="https://github.com/bguneys/bgsapp02082020/blob/master/logo_image_.png" width="100" height="100">
+<img src="https://github.com/bguneys/bgsapp02082020/blob/master/logo_image_.png" width="80" height="80">
 
 
 ### Introduction
