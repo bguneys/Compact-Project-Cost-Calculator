@@ -1,6 +1,6 @@
 # Compact Project Cost Calculator
 
-[![](logo_image_.png)](logo_image_.png){:height="200px" width="200px"}
+[![](logo_image_.png)](logo_image_.png&s=200)
 
 ### Introduction
 "Compact Project Cost Calculator" is a mobile application calculating project costs and project duration in a fast and easy way. With its user friendly minimalist design, "Compact Project Cost Calculator" provides the options of creating multiple projects and adding items to the projects.
