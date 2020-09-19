@@ -94,7 +94,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
             onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {AppStrings.settingsOptionsMenuLabel}.map((String choice) {
+              return {AppStrings.aboutOptionsMenuLabel}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -117,7 +117,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   children: <Widget>[
 
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                      padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 24.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -130,6 +130,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                   child: TextFormField(
                                       style: Theme.of(context).textTheme.bodyText2,
                                       controller: titleTextFieldController,
+                                      maxLength: 50,
                                       validator: (value) {
                                         if (value.isEmpty) {
                                           return AppStrings.enterValueMessage;
@@ -149,6 +150,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                           ),
                                           borderRadius: BorderRadius.all(Radius.circular(45)),
                                         ),
+                                        counterText: '',
+                                        counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.itemTitleHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                       ),
@@ -272,7 +275,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     Visibility(
                       visible: _isHourlyCostVisible,
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 24.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -286,6 +289,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                             style: Theme.of(context).textTheme.bodyText2,
                                             controller: hourlyCostTextFieldController,
                                             keyboardType: TextInputType.number,
+                                            maxLength: 12,
                                             onChanged: _calculateTotalCost,
                                             validator: (value) {
                                               if (value.isEmpty) {
@@ -306,6 +310,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                                   ),
                                                   borderRadius: BorderRadius.all(Radius.circular(45)),
                                                 ),
+                                                counterText: '',
+                                                counterStyle: TextStyle(fontSize: 0),
                                                 hintText: AppStrings.hourlyCostHintText,
                                                 contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                             ),
@@ -322,7 +328,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     Visibility(
                       visible: _isUnitCostVisible,
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 24.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -336,6 +342,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                       style: Theme.of(context).textTheme.bodyText2,
                                       controller: unitCostTextFieldController,
                                       keyboardType: TextInputType.number,
+                                      maxLength: 12,
                                       onChanged: _calculateTotalCost,
                                       validator: (value) {
                                         if (value.isEmpty) {
@@ -356,6 +363,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                           ),
                                           borderRadius: BorderRadius.all(Radius.circular(45)),
                                         ),
+                                        counterText: '',
+                                        counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.unitCostHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                       ),
@@ -372,7 +381,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     Visibility(
                       visible: _isOnetimeCostVisible,
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 24.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -386,6 +395,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                       style: Theme.of(context).textTheme.bodyText2,
                                       controller: onetimeCostTextFieldController,
                                       keyboardType: TextInputType.number,
+                                      maxLength: 12,
                                       onChanged: _calculateTotalCost,
                                       validator: (value) {
                                         if (value.isEmpty) {
@@ -406,6 +416,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                           ),
                                           borderRadius: BorderRadius.all(Radius.circular(45)),
                                         ),
+                                        counterText: '',
+                                        counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.onetimeCostHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                       ),
@@ -422,7 +434,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     Visibility(
                       visible: _isUnitsVisible,
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 24.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -436,6 +448,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                       style: Theme.of(context).textTheme.bodyText2,
                                       controller: unitsTextFieldController,
                                       keyboardType: TextInputType.number,
+                                      maxLength: 7,
+                                      inputFormatters: <TextInputFormatter>[
+                                        WhitelistingTextInputFormatter.digitsOnly
+                                      ],
                                       onChanged: _calculateTotalCost,
                                       validator: (value) {
                                         if (value.isEmpty) {
@@ -456,6 +472,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                           ),
                                           borderRadius: BorderRadius.all(Radius.circular(45)),
                                         ),
+                                        counterText: '',
+                                        counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.unitsHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                       ),
@@ -472,7 +490,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     Visibility(
                       visible: _isWorkHoursVisible,
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                        padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 24.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -486,6 +504,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                       style: Theme.of(context).textTheme.bodyText2,
                                       controller: workHoursADayTextFieldController,
                                       keyboardType: TextInputType.number,
+                                      maxLength: 5,
                                       onChanged: _calculateTotalCost,
                                       validator: (value) {
                                         if (value.isEmpty) {
@@ -509,6 +528,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                           ),
                                           borderRadius: BorderRadius.all(Radius.circular(45)),
                                         ),
+                                        counterText: '',
+                                        counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.workHoursHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                       ),
@@ -523,7 +544,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 16.0, 24.0),
+                      padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 24.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -537,6 +558,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                       style: Theme.of(context).textTheme.bodyText2,
                                       controller: daysTextFieldController,
                                       keyboardType: TextInputType.number,
+                                      maxLength: 4,
                                       inputFormatters: <TextInputFormatter>[
                                         WhitelistingTextInputFormatter.digitsOnly
                                       ],
@@ -564,6 +586,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                             ),
                                             borderRadius: BorderRadius.all(Radius.circular(45)),
                                           ),
+                                          counterText: '',
+                                          counterStyle: TextStyle(fontSize: 0),
                                           hintText: AppStrings.durationHintText,
                                           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
                                       ),
@@ -577,14 +601,14 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
+                      padding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
                       child: Text(_totalCostString,
                           style: Theme.of(context).textTheme.headline4),
                     ),
 
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(24.0, 20.0, 20.0, 24.0),
+                        padding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 16.0),
                         child: RaisedButton(
                           child: Text(AppStrings.addButtonLabel, style: Theme.of(context).textTheme.subtitle1),
                           onPressed: () async {
@@ -600,9 +624,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 String daysString = daysTextFieldController.text;
                                 String workHoursInADayString = workHoursADayTextFieldController.text;
 
-                                double hourlyCost = double.parse(hourlyCostString);
+                                double hourlyCost = numberFormat.parse(hourlyCostString);
                                 int days = int.parse(daysString);
-                                double workHoursInADay = double.parse(workHoursInADayString);
+                                double workHoursInADay = numberFormat.parse(workHoursInADayString);
 
                                 double totalCost = (hourlyCost * workHoursInADay) * days;
 
@@ -625,7 +649,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 String daysString = daysTextFieldController.text;
                                 String unitsString = unitsTextFieldController.text;
 
-                                double unitCost = double.parse(unitCostString);
+                                double unitCost = numberFormat.parse(unitCostString);
                                 int days = int.parse(daysString);
                                 int units = int.parse(unitsString);
 
@@ -649,7 +673,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                 String onetimeCostString = onetimeCostTextFieldController.text;
                                 String daysString = daysTextFieldController.text;
 
-                                double onetimeCost = double.parse(onetimeCostString);
+                                double onetimeCost = numberFormat.parse(onetimeCostString);
                                 int days = int.parse(daysString);
 
                                 double totalCost = onetimeCost;

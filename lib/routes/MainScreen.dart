@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:bgsapp02082020/data/AppStrings.dart';
+import 'package:bgsapp02082020/data/ItemRepository.dart';
 import 'package:bgsapp02082020/data/Project.dart';
 import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/MainScreenViewModel.dart';
@@ -28,8 +29,11 @@ class _MainScreenState extends State<MainScreen> {
   // create ProjectDatabase through creating ProjectRepository instance
   static final projectRepository = ProjectRepository.getInstance();
 
+  // create ProjectDatabase through creating ItemRepository instance
+  static final itemRepository = ItemRepository.getInstance();
+
   // create ViewModel for database operations
-  final mainScreenViewModel = MainScreenViewModel(projectRepository);
+  final mainScreenViewModel = MainScreenViewModel(projectRepository, itemRepository);
 
   //TextController for controlling text entered in TextFormField for project title
   TextEditingController textController = new TextEditingController();
@@ -76,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
             onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {AppStrings.settingsOptionsMenuLabel}.map((String choice) {
+              return {AppStrings.aboutOptionsMenuLabel}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -277,7 +281,22 @@ class _MainScreenState extends State<MainScreen> {
    * Custom method for deleting an item from the list
    */
   void _deleteProject(Project project) async {
-    await mainScreenViewModel.deleteProject(project);
+
+    // delete all items in the project first
+    await mainScreenViewModel.getItemWithProjectId(project.id).then((itemList) {
+      for (var item in itemList) {
+        mainScreenViewModel.deleteItem(item);
+      }
+
+    }).then((value) {
+      // then delete the project
+      mainScreenViewModel.deleteProject(project);
+
+    }).then((value) {
+      // finally update the list on screen
+      populateProjectList();
+    });
+
   }
 
   /**
@@ -295,7 +314,6 @@ class _MainScreenState extends State<MainScreen> {
               child: Text(AppStrings.yes, style: Theme.of(context).textTheme.subtitle1),
               onPressed: () {
                 _deleteProject(longTappedProject);
-                populateProjectList();
                 Navigator.of(context).pop();
               },
             ),

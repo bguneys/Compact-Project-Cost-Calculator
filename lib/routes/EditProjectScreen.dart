@@ -42,7 +42,23 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
     AppStrings.currencyUSD,
     AppStrings.currencyEUR,
     AppStrings.currencyGBP,
-    AppStrings.currencyTRY
+    AppStrings.currencySEK,
+    AppStrings.currencyDKK,
+    AppStrings.currencyNOK,
+    AppStrings.currencyCAD,
+    AppStrings.currencyAUD,
+    AppStrings.currencyNZD,
+    AppStrings.currencyCNY,
+    AppStrings.currencyCHF,
+    AppStrings.currencyINR,
+    AppStrings.currencyPKR,
+    AppStrings.currencyTRY,
+    AppStrings.currencyRUB,
+    AppStrings.currencyUAH,
+    AppStrings.currencyRON,
+    AppStrings.currencyBRL,
+    AppStrings.currencyZAR,
+    AppStrings.currencyKRW
   ];
 
   @override
@@ -74,7 +90,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
             onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {AppStrings.settingsOptionsMenuLabel}.map((String choice) {
+              return {AppStrings.aboutOptionsMenuLabel}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),

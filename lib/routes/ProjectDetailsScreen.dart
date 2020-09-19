@@ -99,7 +99,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
             onSelected: _handleAppBarClick,
             icon: Icon(Icons.more_vert),
             itemBuilder: (BuildContext context) {
-              return {AppStrings.settingsOptionsMenuLabel}.map((String choice) {
+              return {AppStrings.aboutOptionsMenuLabel}.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -246,6 +246,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
 
       totalProjectCost = 0.0;
       totalProjectDuration = 0;
+      double totalElementHours = 0.0;
       double totalProjectHours = 0.0;
       totalProjectHourlyCost = 0.0;
 
@@ -266,11 +267,17 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
           // calculate total cost, duration, hours for the project
           totalProjectCost = totalProjectCost + element.cost;
           totalProjectDuration = totalProjectDuration + element.durationInDay;
-          totalProjectHours = totalProjectHours + (element.hourlyCost * element.durationInDay);
+          totalElementHours = element.workHoursInADay * element.durationInDay;
+          totalProjectHours = totalProjectHours + totalElementHours;
         });
 
         // calculate total hourly cost for the project via total cost and total hours
-        totalProjectHourlyCost = totalProjectCost / totalProjectHours;
+        if(totalProjectHours == 0) {
+          //if there is no hourly cost then make totalProjectHourlyCost zero
+          totalProjectHourlyCost = 0;
+        } else {
+          totalProjectHourlyCost = totalProjectCost / totalProjectHours;
+        }
 
       });
     }).catchError((error) {

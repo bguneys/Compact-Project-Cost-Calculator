@@ -1,3 +1,5 @@
+import 'package:bgsapp02082020/data/Item.dart';
+import 'package:bgsapp02082020/data/ItemRepository.dart';
 import 'package:bgsapp02082020/data/Project.dart';
 import 'package:bgsapp02082020/data/ProjectRepository.dart';
 import 'package:bgsapp02082020/routes/ProjectDetailsScreen.dart';
@@ -8,8 +10,9 @@ import 'SettingsScreen.dart';
 class MainScreenViewModel {
 
   final ProjectRepository projectRepository;
+  final ItemRepository itemRepository;
 
-  MainScreenViewModel(this.projectRepository);
+  MainScreenViewModel(this.projectRepository, this.itemRepository,);
 
   /// Custom method for inserting data into table
   Future<void> insertProject(Project project) async {
@@ -29,6 +32,16 @@ class MainScreenViewModel {
   /// Custom method for updating a Project inside Database table
   Future<void> updateProject(Project project) async {
     projectRepository.updateProject(project);
+  }
+
+  /// Custom method for getting all Items assinged to a Project from database
+  Future<List<Item>> getItemWithProjectId(int itemProjectId) async {
+    return itemRepository.getItemsWithProjectId(itemProjectId);
+  }
+
+  /// Custom method for deleting an Item from database
+  Future<void> deleteItem(Item item) async {
+    itemRepository.deleteItem(item);
   }
 
 

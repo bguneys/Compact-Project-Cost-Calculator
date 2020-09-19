@@ -8,7 +8,7 @@ class AboutScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
 
       appBar: AppBar(
-        title: Text(AppStrings.aboutScreenTitle, style: Theme.of(context).textTheme.headline6),
+        title: Text(AppStrings.aboutAppScreenTitle, style: Theme.of(context).textTheme.headline6),
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
         centerTitle: true,
