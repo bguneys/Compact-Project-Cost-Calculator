@@ -64,7 +64,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
   @override
   void initState() {
     projectNoteTextFieldController.text = project.note;
-    //projectCurrencyTextFieldController.text = project.currency;
+    dropdownValue = project.currency;
 
     super.initState();
 

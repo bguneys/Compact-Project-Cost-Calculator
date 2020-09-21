@@ -55,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
     });
 
     populateProjectList(); // custom method for populating project list
+
   }
 
   @override
@@ -122,7 +123,7 @@ class _MainScreenState extends State<MainScreen> {
                           children: <Widget>[
                             ListTile(
                               title: Text(projectList[index].title, style: Theme.of(context).textTheme.subtitle1),
-                              trailing: Text("${AppStrings.durationLabel} ${projectList[index].durationInDay.toString()} ${AppStrings.daysLabel}\n"
+                              trailing: Text("${AppStrings.durationLabel} ${projectList[index].durationInDay.toString()} ${projectList[index].durationInDay < 2 ? "day" : "days"}\n"
                                   "${AppStrings.costLabel} ${numberFormat.format(projectList[index].cost).toString()} ${projectList[index].currency}",
                                   style: Theme.of(context).textTheme.headline5,
                                   textAlign: TextAlign.end),

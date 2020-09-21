@@ -147,7 +147,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                children: <Widget>[
                                  ListTile(
                                    title: Text(itemList[index].title, style: Theme.of(context).textTheme.subtitle1),
-                                   trailing: Text("${AppStrings.durationLabel} ${itemList[index].durationInDay.toString()} ${AppStrings.daysLabel}\n"
+                                   trailing: Text("${AppStrings.durationLabel} ${itemList[index].durationInDay.toString()} ${itemList[index].durationInDay < 2 ? "day" : "days"}\n"
                                        "${AppStrings.costLabel} ${numberFormat.format(itemList[index].cost).toString()} $projectCurrency",
                                        style: Theme.of(context).textTheme.headline5,
                                        textAlign: TextAlign.end),
@@ -170,7 +170,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                 width: double.infinity,
                 //height: 200.0,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 16.0, 8.0, 16.0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 16.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget> [
@@ -194,7 +194,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
 
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 16.0),
-                              child: Text("${AppStrings.totalDurationLabel} ${totalProjectDuration.toString()} ${AppStrings.daysLabel}",
+                              child: Text("${AppStrings.totalDurationLabel} ${totalProjectDuration.toString()} ${totalProjectDuration < 2 ? "day" : "days"}",
                                   style: Theme.of(context).textTheme.subtitle2),
                             ),
                           ],
@@ -315,7 +315,12 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
    * Custom method for deleting an item from the list
    */
   void _deleteItem(Item item) async {
-    await projectDetailsScreenViewModel.deleteItem(item);
+    projectDetailsScreenViewModel.deleteItem(item).then((value) {
+      populateItemList();
+
+    }).then((value) {
+      getProject(); // used here to update project with renewed item list
+    });
   }
 
   /**
@@ -333,7 +338,6 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
               child: Text(AppStrings.yes, style: Theme.of(context).textTheme.subtitle1),
               onPressed: () {
                 _deleteItem(longTappedItem);
-                populateItemList();
                 Navigator.of(context).pop();
               },
             ),

@@ -154,6 +154,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                         counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.itemTitleHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                        errorStyle: TextStyle(color: Theme.of(context).errorColor),
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
                                       ),
                                     ),
                                 ),
@@ -314,6 +325,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                                 counterStyle: TextStyle(fontSize: 0),
                                                 hintText: AppStrings.hourlyCostHintText,
                                                 contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                                errorStyle: TextStyle(color: Theme.of(context).errorColor),
+                                                errorBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Theme.of(context).errorColor),
+                                                        borderRadius: BorderRadius.all(Radius.circular(45))
+                                                ),
+                                                focusedErrorBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Theme.of(context).errorColor),
+                                                        borderRadius: BorderRadius.all(Radius.circular(45))
+                                                ),
                                             ),
                                           ),
                                       ),
@@ -367,6 +389,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                         counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.unitCostHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                        errorStyle: TextStyle(color: Theme.of(context).errorColor),
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -420,6 +453,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                         counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.onetimeCostHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                        errorStyle: TextStyle(color: Theme.of(context).errorColor),
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -476,6 +520,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                         counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.unitsHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                        errorStyle: TextStyle(color: Theme.of(context).errorColor),
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -532,6 +587,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                         counterStyle: TextStyle(fontSize: 0),
                                         hintText: AppStrings.workHoursHintText,
                                         contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                        errorStyle: TextStyle(color: Theme.of(context).errorColor),
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -590,6 +656,17 @@ class _AddItemScreenState extends State<AddItemScreen> {
                                           counterStyle: TextStyle(fontSize: 0),
                                           hintText: AppStrings.durationHintText,
                                           contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 10.0),
+                                        errorStyle: TextStyle(color: Theme.of(context).errorColor),
+                                        errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Theme.of(context).errorColor),
+                                                borderRadius: BorderRadius.all(Radius.circular(45))
+                                        ),
                                       ),
                                     ),
                                 ),

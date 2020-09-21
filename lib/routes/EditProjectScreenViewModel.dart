@@ -23,7 +23,7 @@ class EditProjectScreenViewModel {
    */
   void handleAppBarClick(String value, BuildContext context) {
     switch (value) {
-      case 'Settings':
+      case 'About':
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => SettingsScreen()),
